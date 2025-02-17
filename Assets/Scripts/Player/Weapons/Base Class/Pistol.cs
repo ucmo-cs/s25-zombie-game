@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,7 +10,7 @@ public class Pistol : MonoBehaviour
     [Header("Basic Stats")]
     [SerializeField] Camera FPCamera;
     [SerializeField] float headshotMultiplier;
-    [SerializeField] int damageAmount;
+    [SerializeField] float damageAmount;
     [SerializeField] double fireRate;
     [SerializeField] public int clipSize;
     [SerializeField] public int currentAmmoAmount;
@@ -61,17 +62,22 @@ public class Pistol : MonoBehaviour
                 StartCoroutine("CanNotShoot");
                 if(hit.transform != null){
                     Debug.Log("Hit Object: " + hit.transform.gameObject.name);
-                    /*var hitbox = hit.collider.GetComponent<EnemyHitboxScript>();
-                    if(hitbox){
-                        float tempDamage;
-                        tempDamage = _damageAmount;
+                    Script_BasicEnemy enemy = null;
 
-                        if(hitbox.isHead){
-                            hitbox.DealDamage(Mathf.CeilToInt(tempDamage * headshotMultiplier), direction, true);
-                        }
-                        else
-                            hitbox.DealDamage(Mathf.CeilToInt(tempDamage), direction, false);
-                    }*/
+                    float tempDamage = damageAmount;
+
+                    if(hit.transform.tag == "Enemy Head"){
+                        tempDamage *= headshotMultiplier;
+                        enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
+                    }
+                    else if (hit.transform.tag == "Enemy"){
+                        enemy = hit.transform.GetComponent<Script_BasicEnemy>();
+                    }
+
+                    if(enemy != null){
+                        Debug.Log(tempDamage);
+                        enemy.TakeDamage(tempDamage);
+                    }
                 }
             }
         }
