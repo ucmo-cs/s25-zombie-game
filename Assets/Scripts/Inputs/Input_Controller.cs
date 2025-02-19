@@ -15,6 +15,9 @@ using UnityEngine.InputSystem;
 		public bool fire;
 		public bool reload;
 
+		[Space(10)]
+		public bool endRound;
+
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
@@ -53,6 +56,11 @@ using UnityEngine.InputSystem;
 		public void OnReload(InputValue value){
 			ReloadInput(value.isPressed);
 		}
+
+		public void OnEndRoundEarly(InputValue value)
+		{
+			EndRoundInput(value.isPressed);
+		}
 #endif
 
 
@@ -83,6 +91,11 @@ using UnityEngine.InputSystem;
 
 		public void ReloadInput(bool newReloadState){
 			reload = newReloadState;
+		}
+
+		public void EndRoundInput(bool newEndRoundState)
+		{
+			endRound = newEndRoundState;
 		}
 		
 		private void OnApplicationFocus(bool hasFocus)

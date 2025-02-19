@@ -48,9 +48,11 @@ public class Script_BasicEnemy : MonoBehaviour
     public void TakeDamage(float damageTaken){
         health -= damageTaken;
 
-        if (health <= 0){
-            Destroy(gameObject);
+        if (health <= 0)
+        {
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EnemyDeath();
             Debug.Log("Enemy has died");
+            Destroy(gameObject);
         }
     }
 }
