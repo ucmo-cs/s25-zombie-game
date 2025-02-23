@@ -10,6 +10,7 @@ public class Script_GameController : MonoBehaviour
     [SerializeField] int spawnIncreaseIncrements = 2;
     [SerializeField]
     Script_Spawner[] spawns = new Script_Spawner[0];
+    [SerializeField] Script_Saloon saloon;
 
     [Header("Enemy Settings")]
     [SerializeField] GameObject enemyPrefab;
@@ -69,6 +70,7 @@ public class Script_GameController : MonoBehaviour
     public void StartRoundTransition()
     {
         float time = Time.time + 30;
+        saloon.DoorToggle(true);
         isTransitioning = true;
         roundTimerUI.enabled = true;
         StartCoroutine(RoundTransition(time));
@@ -80,6 +82,8 @@ public class Script_GameController : MonoBehaviour
         {
             roundTimerUI.enabled = false;
             isTransitioning = false;
+            saloon.DoorToggle(false);
+            saloon.KickOutPlayer();
             StartRound();
         }
     }
@@ -92,6 +96,8 @@ public class Script_GameController : MonoBehaviour
             {
                 roundTimerUI.enabled = false;
                 isTransitioning = false;
+                saloon.DoorToggle(false);
+                saloon.KickOutPlayer();
                 StartRound();
             }
             else

@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -9,6 +10,9 @@ public class Script_BasicEnemy : MonoBehaviour
     [SerializeField] float health = 150;
     [SerializeField] public float damage = 50;
     [SerializeField] float speed = 1;
+
+    [Header("Drops")]
+    [SerializeField] GameObject scrapPrefab;
 
     public bool hasHit = false;
     private NavMeshAgent navMeshAgent;
@@ -45,13 +49,18 @@ public class Script_BasicEnemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damageTaken){
+    public void TakeDamage(float damageTaken, int pointsAdded){
         health -= damageTaken;
 
         if (health <= 0)
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EnemyDeath();
             Debug.Log("Enemy has died");
+            if (UnityEngine.Random.Range(1, 10) <= 2){
+                Debug.Log("Enemy has dropped scrap");
+                Instantiate(scrapPrefab, transform.position, quaternion.identity);
+            }
+            GameObject.FindGameObjectWithTag("Player").GetComponent<Script_PlayerUpgrades>().AddPoints(pointsAdded);
             Destroy(gameObject);
         }
     }

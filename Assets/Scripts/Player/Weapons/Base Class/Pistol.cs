@@ -65,18 +65,21 @@ public class Pistol : MonoBehaviour
                     Script_BasicEnemy enemy = null;
 
                     float tempDamage = damageAmount;
+                    int points = 0;
 
                     if(hit.transform.tag == "Enemy Head"){
                         tempDamage *= headshotMultiplier;
+                        points = 100;
                         enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
                     }
                     else if (hit.transform.tag == "Enemy"){
+                        points = 50;
                         enemy = hit.transform.GetComponent<Script_BasicEnemy>();
                     }
 
                     if(enemy != null){
                         Debug.Log(tempDamage);
-                        enemy.TakeDamage(tempDamage);
+                        enemy.TakeDamage(tempDamage, points);
                     }
                 }
             }

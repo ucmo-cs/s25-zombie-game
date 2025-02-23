@@ -400,6 +400,7 @@ MonoBehaviour:
   health: 150
   damage: 50
   speed: 1
+  scrapPrefab: {fileID: 2485526565337379194, guid: dbadf22e47f852047bb021a7112350b8, type: 3}
   hasHit: 0
 --- !u!195 &4976812624498336753
 NavMeshAgent:
