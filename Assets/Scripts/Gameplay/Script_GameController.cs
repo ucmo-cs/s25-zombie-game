@@ -69,7 +69,7 @@ public class Script_GameController : MonoBehaviour
 
     public void StartRoundTransition()
     {
-        float time = Time.time + 30;
+        float time = Time.time + 60;
         saloon.DoorToggle(true);
         isTransitioning = true;
         roundTimerUI.enabled = true;

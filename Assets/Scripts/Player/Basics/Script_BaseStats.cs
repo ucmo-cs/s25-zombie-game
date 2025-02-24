@@ -15,23 +15,11 @@ public class Script_BaseStats : MonoBehaviour
     private Coroutine lastRegenTimer;
     private Coroutine lastRegen;
 
-    // Input Variables
-    private Input_Controller _input;
-
     void Start()
     {
-        _input = GetComponent<Input_Controller>();
         healthBar.maxValue = health;
         healthBar.value = health;
         maxHealth = health;
-    }
-
-    private void Update()
-    {
-        if (_input != null)
-        {
-            SkipTimer();
-        }
     }
 
     public void TakeDamage(float damage){
@@ -84,15 +72,6 @@ public class Script_BaseStats : MonoBehaviour
             healthBar.value = health;
             yield return new WaitForSeconds(0.1f);
             lastRegen = StartCoroutine(Regen());
-        }
-    }
-
-    public void SkipTimer()
-    {
-        if (_input.endRound == true)
-        {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EndRoundTransitionEarly();
-            _input.endRound = false;
         }
     }
 }

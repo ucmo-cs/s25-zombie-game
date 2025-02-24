@@ -6,6 +6,9 @@ public class Script_Saloon : MonoBehaviour
     [SerializeField] GameObject kickoutPoint;
     private bool playerInSaloon = false;
 
+    [SerializeField] Script_BarMenu barMenu;
+    [SerializeField] GameObject bar;
+
     public void DoorToggle(bool open){
         if (open){
             saloonDoor.SetActive(false);
@@ -23,6 +26,8 @@ public class Script_Saloon : MonoBehaviour
             player.transform.position = kickoutPoint.transform.position;
             player.GetComponent<CharacterController>().enabled = true;
             playerInSaloon = false;
+            bar.GetComponent<Script_Bar>().SetPlayerIsAtBar(false);
+            barMenu.Close();
         }
     }
 

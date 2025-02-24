@@ -16,6 +16,7 @@ using UnityEngine.InputSystem;
 		public bool reload;
 
 		[Space(10)]
+		public bool interact;
 		public bool endRound;
 
 		[Header("Movement Settings")]
@@ -61,10 +62,15 @@ using UnityEngine.InputSystem;
 		{
 			EndRoundInput(value.isPressed);
 		}
+
+		public void OnInteract(InputValue value)
+		{
+			InteractInput(value.isPressed);
+		}
 #endif
 
 
-		public void MoveInput(Vector2 newMoveDirection)
+    public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
 		} 
@@ -97,14 +103,30 @@ using UnityEngine.InputSystem;
 		{
 			endRound = newEndRoundState;
 		}
-		
-		private void OnApplicationFocus(bool hasFocus)
+
+		public void InteractInput(bool newInteractState)
 		{
-			SetCursorState(cursorLocked);
+			interact = newInteractState;
 		}
 
-		private void SetCursorState(bool newState)
+		private void OnApplicationFocus(bool hasFocus)
+			{
+				SetCursorState(cursorLocked);
+			}
+
+		public void SetCursorState(bool newState)
 		{
 			Cursor.lockState = newState ? CursorLockMode.Locked : CursorLockMode.None;
+			cursorLocked = newState;
+		}
+
+		public void ToggleEnabled(bool enabled)
+		{
+	        if (enabled)
+			{
+				GetComponent<PlayerInput>().ActivateInput();
+			}
+			else
+				GetComponent<PlayerInput>().DeactivateInput();
 		}
 	}
