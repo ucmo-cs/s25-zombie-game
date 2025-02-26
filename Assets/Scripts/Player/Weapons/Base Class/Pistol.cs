@@ -10,7 +10,7 @@ public class Pistol : MonoBehaviour
     [Header("Basic Stats")]
     [SerializeField] Camera FPCamera;
     [SerializeField] float headshotMultiplier;
-    [SerializeField] float damageAmount;
+    [SerializeField] float initDamage;
     [SerializeField] double fireRate;
     [SerializeField] public int clipSize;
     [SerializeField] public int currentAmmoAmount;
@@ -23,12 +23,17 @@ public class Pistol : MonoBehaviour
 
     // Input Variables
     private Input_Controller _input;
+
+    // Variables for upgrades
+    private float currentDamage;
+
     public void Awake(){
         currentAmmoAmount = clipSize;
         thisAnim = this.gameObject.GetComponent<Animator>();
     }
 
     private void Start(){
+        currentDamage = initDamage;
         _input = GetComponentInParent<Input_Controller>();
     }
 
@@ -64,7 +69,7 @@ public class Pistol : MonoBehaviour
                     Debug.Log("Hit Object: " + hit.transform.gameObject.name);
                     Script_BasicEnemy enemy = null;
 
-                    float tempDamage = damageAmount;
+                    float tempDamage = currentDamage;
                     int points = 0;
 
                     if(hit.transform.tag == "Enemy Head"){
@@ -127,5 +132,9 @@ public class Pistol : MonoBehaviour
     public void StopReload()
     {
         isReloading = false;
+    }
+
+    public void UpgradeDamage(float percentIncrease){
+        currentDamage = initDamage * percentIncrease;
     }
 }

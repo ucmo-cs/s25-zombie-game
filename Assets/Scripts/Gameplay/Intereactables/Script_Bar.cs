@@ -53,6 +53,7 @@ public class Script_Bar : MonoBehaviour, I_Interactable
             player.GetComponent<Script_OtherControls>().ToggleCursor();
             player.GetComponent<Script_OtherControls>().ToggleInput(false);
             scrollViewUI.GetComponentInChildren<Script_BarMenu>().inMenu = true;
+            scrollViewUI.GetComponentInChildren<Script_BarMenu>().CheckPrices();
         }
     }
 
@@ -62,5 +63,9 @@ public class Script_Bar : MonoBehaviour, I_Interactable
         {
             prompt.enabled = true;
         }
+    }
+
+    public void CloseMenu(){
+        scrollViewUI.SetActive(false);
     }
 }

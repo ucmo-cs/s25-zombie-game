@@ -5,6 +5,7 @@ public class Script_PlayerUpgrades : MonoBehaviour
 {
     [Header("Currencies")]
     [SerializeField] int points = 500;
+    public int GetPoints() { return points; }
     [SerializeField] int scrap = 0;
 
     [Header("UI Elements")]
