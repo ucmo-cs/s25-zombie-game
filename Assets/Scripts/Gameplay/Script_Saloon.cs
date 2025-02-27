@@ -27,7 +27,9 @@ public class Script_Saloon : MonoBehaviour
             player.GetComponent<CharacterController>().enabled = true;
             playerInSaloon = false;
             bar.GetComponent<Script_Bar>().SetPlayerIsAtBar(false);
-            barMenu.Close();
+            bar.GetComponent<Script_Bar>().DisablePrompt();
+            if (barMenu.isActiveAndEnabled)
+                barMenu.Close();
         }
     }
 

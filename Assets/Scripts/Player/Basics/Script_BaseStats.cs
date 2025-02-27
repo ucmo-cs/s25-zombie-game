@@ -74,4 +74,17 @@ public class Script_BaseStats : MonoBehaviour
             lastRegen = StartCoroutine(Regen());
         }
     }
+
+    public void UpgradeHealth(float value)
+    {
+        maxHealth += value;
+        health = maxHealth;
+        healthBar.maxValue = health;
+        healthBar.value = health;
+    }
+
+    public void UpgradeRegenTime(float value)
+    {
+        regenTimer = regenTimer - (regenTimer * value);
+    }
 }

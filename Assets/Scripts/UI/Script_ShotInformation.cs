@@ -13,7 +13,14 @@ public class Script_ShotInformation : MonoBehaviour
     private float scalePercent;
     public float GetScalePercent() { return scalePercent; }
     private int initCost;
+    private float currentScalePercent;
+    public float GetCurrentScalePercent() { return currentScalePercent;  }
     private float costScale = 1;
+
+    private void Start()
+    {
+        currentScalePercent = 1 + scalePercent;
+    }
 
     public void SetInformation(string newName, string newDesc, Color newColor, int newCost, float newScalePercent){
         shotName = newName;
@@ -38,6 +45,7 @@ public class Script_ShotInformation : MonoBehaviour
 
     public void ShotBought(){
         GameObject.FindGameObjectWithTag("Player").GetComponent<Script_PlayerUpgrades>().AddPoints(-cost);
+        currentScalePercent += scalePercent;
         IncreaseCost();
         UpdateInfo();
     }

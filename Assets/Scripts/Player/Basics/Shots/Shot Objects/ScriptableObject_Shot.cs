@@ -9,6 +9,6 @@ public class ScriptableObject_Shot : ScriptableObject
     public string shotDescription;
     public int cost;
 
-    public float scalePercent;
+    public float scalePercentOrValue;
 
 }

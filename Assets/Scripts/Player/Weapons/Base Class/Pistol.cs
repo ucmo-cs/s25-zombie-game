@@ -9,14 +9,14 @@ public class Pistol : MonoBehaviour
 {
     [Header("Basic Stats")]
     [SerializeField] Camera FPCamera;
+    [SerializeField] GameObject pistolModel;
     [SerializeField] float headshotMultiplier;
     [SerializeField] float initDamage;
-    [SerializeField] double fireRate;
+    [SerializeField] float initFireRate;
     [SerializeField] public int clipSize;
     [SerializeField] public int currentAmmoAmount;
 
     // Animation Variables
-    private Animator thisAnim;
     private bool isReloading;
     [SerializeField] private bool isShooting;
     [SerializeField] private bool canNotShoot;
@@ -26,14 +26,15 @@ public class Pistol : MonoBehaviour
 
     // Variables for upgrades
     private float currentDamage;
+    private float currentFireRate;
 
     public void Awake(){
         currentAmmoAmount = clipSize;
-        thisAnim = this.gameObject.GetComponent<Animator>();
     }
 
     private void Start(){
         currentDamage = initDamage;
+        currentFireRate = initFireRate;
         _input = GetComponentInParent<Input_Controller>();
     }
 
@@ -102,12 +103,12 @@ public class Pistol : MonoBehaviour
     }
 
     public void ButtonReload(bool autoReload){
-        if (_input.reload || autoReload){
-            if(currentAmmoAmount < clipSize){
+        if (_input.reload || autoReload ){
+            if (currentAmmoAmount < clipSize && !isReloading){
                 isReloading = true;
 
-                //thisAnim.SetTrigger("Reload"); Used for animation, right now will simply reload
-                Reload();
+                pistolModel.GetComponent<Animator>().SetTrigger("Reload");
+                _input.reload = false;
             }
             else
                 _input.reload = false;
@@ -115,7 +116,8 @@ public class Pistol : MonoBehaviour
     }
 
     IEnumerator CanNotShoot(){
-        yield return new WaitForSeconds((float)(1.0/fireRate));
+        Debug.Log("Current fire rate: " + currentFireRate);
+        yield return new WaitForSeconds((float)(1.0/currentFireRate));
         canNotShoot = false;
     }
 
@@ -136,5 +138,15 @@ public class Pistol : MonoBehaviour
 
     public void UpgradeDamage(float percentIncrease){
         currentDamage = initDamage * percentIncrease;
+    }
+
+    public void UpgradeFireRate(float percentIncrease)
+    {
+        currentFireRate = initFireRate * percentIncrease;
+    }
+
+    public void UpgradeReloadSpeed(float percentIncrease)
+    {
+        pistolModel.GetComponent<Script_WeaponAnimHandling>().SpeedUpReload(percentIncrease);
     }
 }

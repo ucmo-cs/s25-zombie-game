@@ -68,4 +68,9 @@ public class Script_Bar : MonoBehaviour, I_Interactable
     public void CloseMenu(){
         scrollViewUI.SetActive(false);
     }
+
+    public void DisablePrompt()
+    {
+        prompt.enabled = false;
+    }
 }

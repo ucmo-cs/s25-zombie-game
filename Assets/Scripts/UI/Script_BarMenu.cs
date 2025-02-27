@@ -25,11 +25,26 @@ public class Script_BarMenu : MonoBehaviour
             entires.Add(newContent);
 
             newContent.GetComponent<Script_ShotInformation>().SetInformation(shots.GetShots()[i].shotPublicName, 
-                shots.GetShots()[i].shotDescription, shots.GetShots()[i].shotColor, shots.GetShots()[i].cost, shots.GetShots()[i].scalePercent);
+                shots.GetShots()[i].shotDescription, shots.GetShots()[i].shotColor, shots.GetShots()[i].cost, shots.GetShots()[i].scalePercentOrValue);
 
             switch (shots.GetShots()[i].shotInternalName){
                 case "Whiskey":
-                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Whiskey(newContent.GetComponent<Script_ShotInformation>().GetScalePercent(), newContent); });
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Whiskey(newContent.GetComponent<Script_ShotInformation>().GetCurrentScalePercent(), newContent); });
+                    break;
+                case "Broth":
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Broth(newContent.GetComponent<Script_ShotInformation>().GetScalePercent(), newContent); });
+                    break;
+                case "Tap":
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Tap(newContent.GetComponent<Script_ShotInformation>().GetScalePercent(), newContent); });
+                    break;
+                case "Hops":
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Hops(newContent.GetComponent<Script_ShotInformation>().GetCurrentScalePercent(), newContent); });
+                    break;
+                case "Vodka":
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().Vodka(newContent.GetComponent<Script_ShotInformation>().GetScalePercent(), newContent); });
+                    break;
+                case "IPA":
+                    newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { bar.GetComponent<Script_PlayerShots>().IPA(newContent.GetComponent<Script_ShotInformation>().GetCurrentScalePercent(), newContent); });
                     break;
                 default:
                     Debug.Log("Cannot set shot function, check the internal naming and if it matches the case");

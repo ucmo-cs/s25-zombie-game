@@ -1239,6 +1239,45 @@ Transform:
   m_Children: []
   m_Father: {fileID: 834733613}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &707167815 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 588600381385362436, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
+  m_PrefabInstance: {fileID: 8365407860526244236}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &707167819
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707167815}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e819803693919634181b219715439546, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &707167820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707167815}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4fc26beca77bbc4286afacf03e9a6e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &731389214
 GameObject:
   m_ObjectHideFlags: 0
@@ -1775,6 +1814,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shots:
   - {fileID: 11400000, guid: 4f044736494a0134ba14437d5c44e35a, type: 2}
+  - {fileID: 11400000, guid: 942b0f18397e55c4fb123dea8d286888, type: 2}
+  - {fileID: 11400000, guid: 06c0051a0aa7f6e4f81922ad47a314df, type: 2}
+  - {fileID: 11400000, guid: 158b91918502b1b40bd3cfcd503434b9, type: 2}
+  - {fileID: 11400000, guid: 04d86df93cd40a44d96526ffb390058b, type: 2}
+  - {fileID: 11400000, guid: 30d4e9983a52e634388016424ddf310a, type: 2}
 --- !u!1 &885476901
 GameObject:
   m_ObjectHideFlags: 0
@@ -1851,9 +1895,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPCamera: {fileID: 1927930093}
+  pistolModel: {fileID: 707167815}
   headshotMultiplier: 2
   initDamage: 100
-  fireRate: 3
+  initFireRate: 1
   clipSize: 6
   currentAmmoAmount: 6
   isShooting: 0
@@ -4143,6 +4188,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 243458542874531518, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.3731387
+      objectReference: {fileID: 0}
     - target: {fileID: 2460052105310784558, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
       propertyPath: m_TagString
       value: Untagged
@@ -4218,6 +4267,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7548718083947748507, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 930785836}
+    - targetCorrespondingSourceObject: {fileID: 588600381385362436, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 707167820}
+    - targetCorrespondingSourceObject: {fileID: 588600381385362436, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 707167819}
     - targetCorrespondingSourceObject: {fileID: 4572734775110459895, guid: 01bb27284b3a40544889c5df2236d8c2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8997996946039771992}
