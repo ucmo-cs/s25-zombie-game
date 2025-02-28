@@ -7,7 +7,15 @@ public class Script_Saloon : MonoBehaviour
     private bool playerInSaloon = false;
 
     [SerializeField] Script_BarMenu barMenu;
-    [SerializeField] GameObject bar;
+    [SerializeField] Script_ScrapMenu scrapMenu;
+    private Script_Bar bar;
+    private Script_Mechanic mechanic;
+
+    void Start()
+    {
+        bar = GetComponentInChildren<Script_Bar>();
+        mechanic = GetComponentInChildren<Script_Mechanic>();
+    }
 
     public void DoorToggle(bool open){
         if (open){
@@ -26,10 +34,14 @@ public class Script_Saloon : MonoBehaviour
             player.transform.position = kickoutPoint.transform.position;
             player.GetComponent<CharacterController>().enabled = true;
             playerInSaloon = false;
-            bar.GetComponent<Script_Bar>().SetPlayerIsAtBar(false);
-            bar.GetComponent<Script_Bar>().DisablePrompt();
+            bar.SetPlayerIsAtBar(false);
+            bar.DisablePrompt();
+            mechanic.SetPlayerIsAtMech(false);
+            mechanic.DisablePrompt();
             if (barMenu.isActiveAndEnabled)
                 barMenu.Close();
+            if (scrapMenu.isActiveAndEnabled)
+                scrapMenu.Close();
         }
     }
 
