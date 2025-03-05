@@ -11,6 +11,7 @@ public class Script_OtherControls : MonoBehaviour
     private void Start()
     {
         _input = GetComponent<Input_Controller>();
+        ToggleInput(false);
     }
 
     private void Update()
@@ -46,6 +47,11 @@ public class Script_OtherControls : MonoBehaviour
     public void ToggleCursor()
     {
         _input.SetCursorState(!_input.cursorLocked);
+    }
+
+    public void ToggleCursor(bool toggle)
+    {
+        _input.SetCursorState(toggle);
     }
 
     public void ToggleInput(bool input)

@@ -18,15 +18,19 @@ public class Script_GameController : MonoBehaviour
     [Header("UI Settings")]
     [SerializeField] TMP_Text roundUI;
     [SerializeField] TMP_Text roundTimerUI;
+    [SerializeField] GameObject networkUI;
 
     private int round = 0;
     private int currentSpawns = 0;
     private int enemiesLeft = 0;
     private bool isTransitioning = false;
 
-    public void Start()
+    public void StartGame()
     {
         StartRound();
+        networkUI.SetActive(false);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleInput(true);
+        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleCursor(true);
     }
 
     public void StartRound()

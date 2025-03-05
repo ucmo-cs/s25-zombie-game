@@ -9,7 +9,6 @@ public class Script_BaseStats : MonoBehaviour
     [Header("Basic Stats")]
     [SerializeField] float health = 150;
     [SerializeField] float regenTimer = 2f;
-    [SerializeField] Slider healthBar;
 
     private float maxHealth;
     private Coroutine lastRegenTimer;
@@ -17,14 +16,14 @@ public class Script_BaseStats : MonoBehaviour
 
     void Start()
     {
-        healthBar.maxValue = health;
-        healthBar.value = health;
+        Script_UIManager.Instance.healthBar.maxValue = health;
+        Script_UIManager.Instance.healthBar.value = health;
         maxHealth = health;
     }
 
     public void TakeDamage(float damage){
         health -= damage;
-        healthBar.value = health;
+        Script_UIManager.Instance.healthBar.value = health;
 
         if (lastRegenTimer != null)
         {
@@ -69,7 +68,7 @@ public class Script_BaseStats : MonoBehaviour
                 health += 10;
 
 
-            healthBar.value = health;
+            Script_UIManager.Instance.healthBar.value = health;
             yield return new WaitForSeconds(0.1f);
             lastRegen = StartCoroutine(Regen());
         }
@@ -79,8 +78,8 @@ public class Script_BaseStats : MonoBehaviour
     {
         maxHealth += value;
         health = maxHealth;
-        healthBar.maxValue = health;
-        healthBar.value = health;
+        Script_UIManager.Instance.healthBar.maxValue = health;
+        Script_UIManager.Instance.healthBar.value = health;
     }
 
     public void UpgradeRegenTime(float value)

@@ -23,7 +23,7 @@ using UnityEngine.InputSystem;
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
-		public bool cursorLocked = true;
+		public bool cursorLocked = false;
 		public bool cursorInputForLook = true;
 
 #if ENABLE_INPUT_SYSTEM
@@ -111,7 +111,8 @@ using UnityEngine.InputSystem;
 
 		private void OnApplicationFocus(bool hasFocus)
 			{
-				SetCursorState(cursorLocked);
+				if (cursorLocked)
+					SetCursorState(cursorLocked);
 			}
 
 		public void SetCursorState(bool newState)

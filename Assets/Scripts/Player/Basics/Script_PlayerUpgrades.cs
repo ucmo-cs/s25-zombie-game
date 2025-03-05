@@ -9,14 +9,10 @@ public class Script_PlayerUpgrades : MonoBehaviour
     [SerializeField] int scrap = 0;
     public int GetScrap() { return scrap; }
 
-    [Header("UI Elements")]
-    [SerializeField] TMP_Text pointsText;
-    [SerializeField] TMP_Text scrapText;
-
     void Start()
     {
-        pointsText.text = "Points: " + points;
-        scrapText.text = "Scrap: " + scrap;
+        Script_UIManager.Instance.pointsText.text = "Points: " + points;
+        Script_UIManager.Instance.scrapText.text = "Scrap: " + scrap;
     }
 
     public void AddPoints(int value){
@@ -25,7 +21,7 @@ public class Script_PlayerUpgrades : MonoBehaviour
         else
             points += value;
 
-        pointsText.text = "Points: " + points;
+        Script_UIManager.Instance.pointsText.text = "Points: " + points;
     }
 
     public void AddScrap(int value){
@@ -34,6 +30,6 @@ public class Script_PlayerUpgrades : MonoBehaviour
         else
             scrap += value;
 
-        scrapText.text = "Scrap: " + scrap;
+        Script_UIManager.Instance.scrapText.text = "Scrap: " + scrap;
     }
 }

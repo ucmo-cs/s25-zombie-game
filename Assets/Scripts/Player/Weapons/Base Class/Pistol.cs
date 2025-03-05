@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class Pistol : MonoBehaviour
 {
     [Header("Basic Stats")]
-    [SerializeField] Camera FPCamera;
     [SerializeField] GameObject pistolModel;
     [SerializeField] float headshotMultiplier;
     [SerializeField] float initDamage;
@@ -28,11 +27,15 @@ public class Pistol : MonoBehaviour
     private float currentDamage;
     private float currentFireRate;
 
+    private Camera FPCamera;
+
+
     public void Awake(){
         currentAmmoAmount = clipSize;
     }
 
     private void Start(){
+        FPCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         currentDamage = initDamage;
         currentFireRate = initFireRate;
         _input = GetComponentInParent<Input_Controller>();
