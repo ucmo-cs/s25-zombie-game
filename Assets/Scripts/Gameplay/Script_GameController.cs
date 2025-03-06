@@ -1,8 +1,9 @@
 using System.Collections;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Script_GameController : MonoBehaviour
+public class Script_GameController : NetworkBehaviour
 {
     [Header("Gameplay Settings")]
     [SerializeField] float spawnIntervals = 1f;
@@ -25,12 +26,25 @@ public class Script_GameController : MonoBehaviour
     private int enemiesLeft = 0;
     private bool isTransitioning = false;
 
+    private void Start()
+    {
+        NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectedCallback;
+    }
+
+    private void ClientConnectedCallback(ulong obj)
+    {
+        if (NetworkManager.Singleton.LocalClientId != 0)
+        {
+            networkUI.SetActive(false);
+            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
+        }
+    }
+
     public void StartGame()
     {
         StartRound();
         networkUI.SetActive(false);
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleInput(true);
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleCursor(true);
+        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
     }
 
     public void StartRound()
@@ -59,8 +73,21 @@ public class Script_GameController : MonoBehaviour
         }
     }
 
-    public void EnemyDeath()
+    [Rpc(SendTo.Server)]
+    public void EnemyDeathRpc(NetworkObjectReference enemy, NetworkObjectReference playerThatKilled, int pointsAdded)
     {
+        Debug.Log("Enemy has died");
+        if (UnityEngine.Random.Range(1, 10) <= 2)
+        {
+            Debug.Log("Enemy has dropped scrap");
+        }
+
+        GameObject playerCredit = playerThatKilled;
+        playerCredit.GetComponent<Script_PlayerUpgrades>().AddPoints(pointsAdded);
+
+        GameObject enemyGameObject = enemy;
+        Destroy(enemyGameObject);
+
         enemiesLeft--;
 
         if (enemiesLeft <= 0)

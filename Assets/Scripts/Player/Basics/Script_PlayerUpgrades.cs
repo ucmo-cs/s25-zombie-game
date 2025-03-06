@@ -1,7 +1,8 @@
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Script_PlayerUpgrades : MonoBehaviour
+public class Script_PlayerUpgrades : NetworkBehaviour
 {
     [Header("Currencies")]
     [SerializeField] int points = 500;
@@ -21,7 +22,8 @@ public class Script_PlayerUpgrades : MonoBehaviour
         else
             points += value;
 
-        Script_UIManager.Instance.pointsText.text = "Points: " + points;
+        if (IsLocalPlayer)
+            Script_UIManager.Instance.pointsText.text = "Points: " + points;
     }
 
     public void AddScrap(int value){

@@ -140,12 +140,12 @@ GameObject:
   - component: {fileID: 5150721584844284567}
   - component: {fileID: 6550936314402641934}
   - component: {fileID: 8557694549671902276}
+  - component: {fileID: 6500962509138882350}
   - component: {fileID: 7129158804549150520}
   - component: {fileID: 4819826503441624559}
   - component: {fileID: 338953347901975055}
   - component: {fileID: 8119734692976727425}
   - component: {fileID: 8716748321754083688}
-  - component: {fileID: 6500962509138882350}
   - component: {fileID: 7492217245441046341}
   - component: {fileID: 6667092417546148780}
   m_Layer: 8
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732714475595375679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -350,7 +350,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1732714475595375679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f77fb2bfcf4b8e4d8ed7ce29ab76f56, type: 3}
   m_Name: 
@@ -366,7 +366,7 @@ MonoBehaviour:
   analogMovement: 0
   cursorLocked: 1
   cursorInputForLook: 1
---- !u!114 &7129158804549150520
+--- !u!114 &6500962509138882350
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -375,9 +375,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 1732714475595375679}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 284913838
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  DeferredDespawnTick: 0
+  Ownership: 1
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+  SyncOwnerTransformWhenParented: 1
+  AllowOwnerToParent: 0
+--- !u!114 &7129158804549150520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732714475595375679}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3fb4dc608a39aa042b2d7e19e44ad9fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  _input: {fileID: 8557694549671902276}
 --- !u!114 &4819826503441624559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +419,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 150
   regenTimer: 2
-  healthBar: {fileID: 0}
 --- !u!114 &338953347901975055
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,8 +445,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points: 500
   scrap: 0
-  pointsText: {fileID: 0}
-  scrapText: {fileID: 0}
 --- !u!65 &8716748321754083688
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -442,31 +466,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 2.0820003, z: 1}
   m_Center: {x: 0, y: 1.0193744, z: 0}
---- !u!114 &6500962509138882350
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1732714475595375679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 284913838
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  DeferredDespawnTick: 0
-  Ownership: 1
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
-  SyncOwnerTransformWhenParented: 1
-  AllowOwnerToParent: 0
 --- !u!114 &7492217245441046341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,7 +597,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7fe98d48779ca642aca572840dbf697, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FPCamera: {fileID: 0}
   pistolModel: {fileID: 919132149155446097}
   headshotMultiplier: 2
   initDamage: 100
@@ -734,7 +732,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7453909831503732874}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 

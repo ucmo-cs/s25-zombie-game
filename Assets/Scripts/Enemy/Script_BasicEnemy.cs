@@ -1,5 +1,5 @@
 using System.Collections;
-using Unity.Mathematics;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -54,14 +54,7 @@ public class Script_BasicEnemy : MonoBehaviour
 
         if (health <= 0)
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EnemyDeath();
-            Debug.Log("Enemy has died");
-            if (UnityEngine.Random.Range(1, 10) <= 2){
-                Debug.Log("Enemy has dropped scrap");
-                Instantiate(scrapPrefab, transform.position, quaternion.identity);
-            }
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Script_PlayerUpgrades>().AddPoints(pointsAdded);
-            Destroy(gameObject);
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EnemyDeathRpc(new NetworkObjectReference(gameObject), new NetworkObjectReference(NetworkManager.Singleton.LocalClient.PlayerObject), pointsAdded);
         }
     }
 }

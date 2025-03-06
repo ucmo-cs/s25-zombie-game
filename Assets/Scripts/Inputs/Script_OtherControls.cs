@@ -1,17 +1,30 @@
+using Unity.Cinemachine;
+using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Windows;
+using UnityEngine.InputSystem;
 
-public class Script_OtherControls : MonoBehaviour
+public class Script_OtherControls : NetworkBehaviour
 {
     public I_Interactable currentInteractable;
 
     // Input Variables
-    private Input_Controller _input;
+    [SerializeField] private Input_Controller _input;
 
     private void Start()
     {
-        _input = GetComponent<Input_Controller>();
         ToggleInput(false);
+    }
+
+    public void EnableInput()
+    {
+        if (IsLocalPlayer)
+        {
+            GetComponent<PlayerInput>().enabled = true;
+            GetComponent<Input_Controller>().enabled = true;
+            GetComponentInChildren<CinemachineCamera>().enabled = true;
+            ToggleCursor(true);
+            ToggleInput(true);
+        }
     }
 
     private void Update()

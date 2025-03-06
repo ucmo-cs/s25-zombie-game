@@ -26,8 +26,13 @@ using UnityEngine.InputSystem;
 		public bool cursorLocked = false;
 		public bool cursorInputForLook = true;
 
+		private void Awake()
+		{
+			Cursor.lockState = CursorLockMode.None;
+		}
+
 #if ENABLE_INPUT_SYSTEM
-		public void OnMove(InputValue value)
+    public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
 		}
@@ -111,7 +116,7 @@ using UnityEngine.InputSystem;
 
 		private void OnApplicationFocus(bool hasFocus)
 			{
-				if (cursorLocked)
+				if (Cursor.lockState == CursorLockMode.Locked)
 					SetCursorState(cursorLocked);
 			}
 
