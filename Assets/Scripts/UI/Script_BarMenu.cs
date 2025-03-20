@@ -58,7 +58,7 @@ public class Script_BarMenu : MonoBehaviour
     }
 
     public void CheckPrices(){
-        int currentPoints = GameObject.FindGameObjectWithTag("Player").GetComponent<Script_PlayerUpgrades>().GetPoints();
+        int currentPoints = GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_PlayerUpgrades>().GetPoints();
         foreach (GameObject entry in entires){
             entry.GetComponent<Script_ShotInformation>().CheckIfCanBuy(currentPoints);
         }
@@ -67,8 +67,8 @@ public class Script_BarMenu : MonoBehaviour
     public void Close()
     {
         gameObject.GetComponentInParent<ScrollRect>().gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleCursor();
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleInput(true);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_OtherControls>().ToggleCursor();
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_OtherControls>().ToggleInput(true);
         bar.GetComponent<Script_Bar>().ReactivatePrompt();
         inMenu = false;
     }

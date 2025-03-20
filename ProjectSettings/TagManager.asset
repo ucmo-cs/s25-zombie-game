@@ -8,6 +8,9 @@ TagManager:
   - Enemy
   - Enemy Head
   - Enemy Attack
+  - UI Manager
+  - Bar
+  - LocalPlayer
   layers:
   - Default
   - TransparentFX

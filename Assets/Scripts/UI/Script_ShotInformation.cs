@@ -44,7 +44,7 @@ public class Script_ShotInformation : MonoBehaviour
     }
 
     public void ShotBought(){
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_PlayerUpgrades>().AddPoints(-cost);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_PlayerUpgrades>().AddPointsRpc(-cost);
         currentScalePercent += scalePercent;
         IncreaseCost();
         UpdateInfo();

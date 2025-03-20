@@ -22,7 +22,6 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     private void Start()
     {
         menuTrigger = gameObject.AddComponent<BoxCollider>();
-        player = GameObject.FindGameObjectWithTag("Player");
         prompt.text = "Press E to open scrap menu [Cost: " + scrapCost + "]";
 
         menuTrigger.size = new Vector3(1.5f, 1.5f, 1.5f);
@@ -34,7 +33,8 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
         if (other.tag == "Player")
         {
             playerIsAtMech = true;
-            player.GetComponent<Script_OtherControls>().currentInteractable = this;
+            other.GetComponent<Script_OtherControls>().currentInteractable = this;
+            player = other.gameObject;
             prompt.enabled = true;
         }
     }
@@ -44,7 +44,8 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
         if (other.tag == "Player")
         {
             playerIsAtMech = false;
-            player.GetComponent<Script_OtherControls>().currentInteractable = null;
+            other.GetComponent<Script_OtherControls>().currentInteractable = null;
+            player = null;
             prompt.enabled = false;
         }
     }

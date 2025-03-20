@@ -16,7 +16,8 @@ public class Script_PlayerUpgrades : NetworkBehaviour
         Script_UIManager.Instance.scrapText.text = "Scrap: " + scrap;
     }
 
-    public void AddPoints(int value){
+    [Rpc(SendTo.ClientsAndHost)]
+    public void AddPointsRpc(int value){
         if (points + value < 0)
             points = 0;
         else

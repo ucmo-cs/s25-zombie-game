@@ -2349,8 +2349,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1552735938}
   m_HandleRect: {fileID: 1552735937}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3062,7 +3062,7 @@ GameObject:
   - component: {fileID: 834733618}
   m_Layer: 0
   m_Name: TestBar
-  m_TagString: Untagged
+  m_TagString: Bar
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5323,7 +5323,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 928680795}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5976,7 +5976,7 @@ GameObject:
   - component: {fileID: 1357818724}
   m_Layer: 0
   m_Name: UI Manager
-  m_TagString: Untagged
+  m_TagString: UI Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

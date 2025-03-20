@@ -14,10 +14,11 @@ public class Script_Bar : MonoBehaviour, I_Interactable
 
     private GameObject player;
 
+    public void SetPlayer(GameObject value) { player = value; }
+
     private void Start()
     {
         menuTrigger = gameObject.AddComponent<BoxCollider>();
-        player = GameObject.FindGameObjectWithTag("Player");
 
         menuTrigger.size = new Vector3(1.5f, 1.5f, 1.2f);
         menuTrigger.isTrigger = true;
@@ -25,7 +26,7 @@ public class Script_Bar : MonoBehaviour, I_Interactable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject == player)
         {
             playerIsAtBar = true;
             player.GetComponent<Script_OtherControls>().currentInteractable = this;
@@ -35,7 +36,7 @@ public class Script_Bar : MonoBehaviour, I_Interactable
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.gameObject == player)
         {
             playerIsAtBar = false;
             player.GetComponent<Script_OtherControls>().currentInteractable = null;

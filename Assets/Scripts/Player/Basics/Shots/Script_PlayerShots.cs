@@ -11,37 +11,37 @@ public class Script_PlayerShots : MonoBehaviour
     }
 
     public void Whiskey(float increaseValue, GameObject entry){
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>().UpgradeDamage(increaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().UpgradeDamage(increaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 
     public void Broth(float increaseValue, GameObject entry)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_BaseStats>().UpgradeHealth(increaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_BaseStats>().UpgradeHealth(increaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 
     public void Tap(float increaseValue, GameObject entry) 
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>().UpgradeReloadSpeed(increaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().UpgradeReloadSpeed(increaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 
     public void Hops(float increaseValue, GameObject entry)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<FirstPersonController>().UpgradeSpeed(increaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<FirstPersonController>().UpgradeSpeed(increaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 
     public void Vodka(float decreaseValue, GameObject entry)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_BaseStats>().UpgradeRegenTime(decreaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_BaseStats>().UpgradeRegenTime(decreaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 
     public void IPA(float increaseValue, GameObject entry)
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>().UpgradeFireRate(increaseValue);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().UpgradeFireRate(increaseValue);
         entry.GetComponent<Script_ShotInformation>().ShotBought();
     }
 }

@@ -5,11 +5,6 @@ public class Script_WeaponAnimHandling : MonoBehaviour
     private Pistol pistol;
     private float reloadSpeed = 1;
 
-    private void Start()
-    {
-        pistol = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>();
-    }
-
     public void SpeedUpReload(float percentIncrease)
     {
         reloadSpeed += percentIncrease;
@@ -17,6 +12,11 @@ public class Script_WeaponAnimHandling : MonoBehaviour
     }
     public void ReloadWeapon()
     {
+        if (pistol == null)
+        {
+            pistol = GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>();
+        }
+
         pistol.Reload();
     }
 }

@@ -39,7 +39,6 @@ public class Script_GameController : NetworkBehaviour
             NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
         }
     }
-
     public void StartGame()
     {
         StartRound();
@@ -49,12 +48,21 @@ public class Script_GameController : NetworkBehaviour
 
     public void StartRound()
     {
-        spawnAmount += spawnIncreaseIncrements;
-        round++;
-        currentSpawns = 0;
-        enemiesLeft = spawnAmount;
-        roundUI.text = round.ToString();
-        StartCoroutine(SpawnCycle());
+        if (NetworkManager.IsServer)
+        {
+            spawnAmount += spawnIncreaseIncrements;
+            currentSpawns = 0;
+            enemiesLeft = spawnAmount;
+            round++;
+            StartCoroutine(SpawnCycle());
+        }
+        StartRoundRpc(round);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartRoundRpc(int newRound)
+    {
+        roundUI.text = newRound.ToString();
     }
 
     IEnumerator SpawnCycle()
@@ -83,7 +91,7 @@ public class Script_GameController : NetworkBehaviour
         }
 
         GameObject playerCredit = playerThatKilled;
-        playerCredit.GetComponent<Script_PlayerUpgrades>().AddPoints(pointsAdded);
+        playerCredit.GetComponent<Script_PlayerUpgrades>().AddPointsRpc(pointsAdded);
 
         GameObject enemyGameObject = enemy;
         Destroy(enemyGameObject);
@@ -94,11 +102,12 @@ public class Script_GameController : NetworkBehaviour
         {
             StopCoroutine(SpawnCycle());
             Debug.Log("Round ended");
-            StartRoundTransition();
+            StartRoundTransitionRpc();
         }
     }
 
-    public void StartRoundTransition()
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartRoundTransitionRpc()
     {
         float time = Time.time + 60;
         saloon.DoorToggle(true);
