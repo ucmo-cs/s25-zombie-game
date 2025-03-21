@@ -471,6 +471,7 @@ MonoBehaviour:
   - {fileID: 990582825}
   saloon: {fileID: 507213043}
   enemyPrefab: {fileID: 8593213830178575757, guid: 21e37dcc3b81fe14da31b05705828526, type: 3}
+  scrapPrefab: {fileID: 2485526565337379194, guid: dbadf22e47f852047bb021a7112350b8, type: 3}
   roundUI: {fileID: 1026089147}
   roundTimerUI: {fileID: 759268147}
   networkUI: {fileID: 1718845573}
@@ -2350,7 +2351,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1552735937}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5322,8 +5323,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 928680796}
   m_HandleRect: {fileID: 928680795}
   m_Direction: 0
-  m_Value: 0
-  m_Size: 0.9999999
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

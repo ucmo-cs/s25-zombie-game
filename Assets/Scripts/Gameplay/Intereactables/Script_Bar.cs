@@ -12,10 +12,6 @@ public class Script_Bar : MonoBehaviour, I_Interactable
     private bool playerIsAtBar = false;
     public void SetPlayerIsAtBar(bool value) { playerIsAtBar = value; }
 
-    private GameObject player;
-
-    public void SetPlayer(GameObject value) { player = value; }
-
     private void Start()
     {
         menuTrigger = gameObject.AddComponent<BoxCollider>();
@@ -26,20 +22,20 @@ public class Script_Bar : MonoBehaviour, I_Interactable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.tag == "LocalPlayer")
         {
             playerIsAtBar = true;
-            player.GetComponent<Script_OtherControls>().currentInteractable = this;
+            other.GetComponent<Script_OtherControls>().currentInteractable = this;
             prompt.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.gameObject.tag == "LocalPlayer")
         {
             playerIsAtBar = false;
-            player.GetComponent<Script_OtherControls>().currentInteractable = null;
+            other.GetComponent<Script_OtherControls>().currentInteractable = null;
             prompt.enabled = false;
         }
     }
@@ -48,6 +44,7 @@ public class Script_Bar : MonoBehaviour, I_Interactable
     {
         if (playerIsAtBar)
         {
+            GameObject player = GameObject.FindGameObjectWithTag("LocalPlayer");
             Debug.Log("Open bar menu");
             scrollViewUI.SetActive(true);
             prompt.enabled = false;

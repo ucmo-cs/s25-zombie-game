@@ -14,7 +14,6 @@ public class Script_OtherControls : NetworkBehaviour
     {
         if (IsLocalPlayer)
         {
-            GameObject.FindGameObjectWithTag("Bar").GetComponent<Script_Bar>().SetPlayer(gameObject);
             gameObject.tag = "LocalPlayer";
         }
     }
@@ -51,7 +50,6 @@ public class Script_OtherControls : NetworkBehaviour
 
     public void CheckInteract()
     {
-        Debug.Log("Checking interact");
         if (_input.interact == true)
         {
             Debug.Log("Reached Interact");

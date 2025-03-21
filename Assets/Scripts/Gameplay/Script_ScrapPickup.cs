@@ -8,7 +8,7 @@ public class Script_ScrapPickup : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player" && !hasGivenScrap){
+        if (other.gameObject.tag == "LocalPlayer" && !hasGivenScrap){
             hasGivenScrap = true;
             other.gameObject.GetComponent<Script_PlayerUpgrades>().AddScrap(scrapValue);
             Destroy(gameObject);

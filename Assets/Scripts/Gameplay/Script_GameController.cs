@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class Script_GameController : NetworkBehaviour
 
     [Header("Enemy Settings")]
     [SerializeField] GameObject enemyPrefab;
+    [SerializeField] GameObject scrapPrefab;
 
     [Header("UI Settings")]
     [SerializeField] TMP_Text roundUI;
@@ -38,6 +40,7 @@ public class Script_GameController : NetworkBehaviour
             networkUI.SetActive(false);
             NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
         }
+
     }
     public void StartGame()
     {
@@ -84,17 +87,20 @@ public class Script_GameController : NetworkBehaviour
     [Rpc(SendTo.Server)]
     public void EnemyDeathRpc(NetworkObjectReference enemy, NetworkObjectReference playerThatKilled, int pointsAdded)
     {
+        GameObject enemyGameObject = enemy;
+        Transform scrapPosition = enemyGameObject.transform;
+
         Debug.Log("Enemy has died");
-        if (UnityEngine.Random.Range(1, 10) <= 2)
-        {
-            Debug.Log("Enemy has dropped scrap");
-        }
 
         GameObject playerCredit = playerThatKilled;
         playerCredit.GetComponent<Script_PlayerUpgrades>().AddPointsRpc(pointsAdded);
 
-        GameObject enemyGameObject = enemy;
         Destroy(enemyGameObject);
+        if (UnityEngine.Random.Range(1, 10) <= 2)
+        {
+            Debug.Log("Enemy has dropped scrap");
+            SpawnScrapRpc(scrapPosition.position);
+        }
 
         enemiesLeft--;
 
@@ -104,6 +110,12 @@ public class Script_GameController : NetworkBehaviour
             Debug.Log("Round ended");
             StartRoundTransitionRpc();
         }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SpawnScrapRpc(Vector3 position)
+    {
+        Instantiate(scrapPrefab, position, Quaternion.identity);
     }
 
     [Rpc(SendTo.ClientsAndHost)]

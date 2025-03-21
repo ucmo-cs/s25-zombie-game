@@ -33,6 +33,7 @@ public class Script_PlayerUpgrades : NetworkBehaviour
         else
             scrap += value;
 
-        Script_UIManager.Instance.scrapText.text = "Scrap: " + scrap;
+        if (IsLocalPlayer)
+            Script_UIManager.Instance.scrapText.text = "Scrap: " + scrap;
     }
 }

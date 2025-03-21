@@ -17,8 +17,6 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     private bool playerIsAtMech = false;
     public void SetPlayerIsAtMech(bool value) { playerIsAtMech = value; }
 
-    private GameObject player;
-
     private void Start()
     {
         menuTrigger = gameObject.AddComponent<BoxCollider>();
@@ -30,28 +28,28 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "LocalPlayer")
         {
             playerIsAtMech = true;
             other.GetComponent<Script_OtherControls>().currentInteractable = this;
-            player = other.gameObject;
             prompt.enabled = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "LocalPlayer")
         {
             playerIsAtMech = false;
             other.GetComponent<Script_OtherControls>().currentInteractable = null;
-            player = null;
             prompt.enabled = false;
         }
     }
 
     public void OnInteract()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("LocalPlayer");
+
         if (playerIsAtMech)
         {
             if (player.GetComponent<Script_PlayerUpgrades>().GetScrap() < scrapCost)

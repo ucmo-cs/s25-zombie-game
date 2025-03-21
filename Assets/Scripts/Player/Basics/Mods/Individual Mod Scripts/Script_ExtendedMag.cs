@@ -12,11 +12,11 @@ public class Script_ExtendedMag : MonoBehaviour, I_Mods
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>().clipSize += 2;
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().clipSize += 2;
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<Pistol>().clipSize -= 2;
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().clipSize -= 2;
     }
 }

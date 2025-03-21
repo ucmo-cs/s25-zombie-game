@@ -1,9 +1,11 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Script_BasicEnemy : MonoBehaviour
+public class Script_BasicEnemy : NetworkBehaviour
 {
 
     [Header("Basic Stats")]
@@ -11,17 +13,22 @@ public class Script_BasicEnemy : MonoBehaviour
     [SerializeField] public float damage = 50;
     [SerializeField] float speed = 1;
 
-    [Header("Drops")]
-    [SerializeField] GameObject scrapPrefab;
-
     public bool hasHit = false;
     private NavMeshAgent navMeshAgent;
+    private List<GameObject> players;
 
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        navMeshAgent.destination = new Vector3(0, 0, 0);
 
         InitiateChase();
+    }
+
+    public void GetPlayers()
+    {
+        players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
+        players.Add(GameObject.FindGameObjectWithTag("LocalPlayer"));
     }
 
     public void EndAttack(){
@@ -29,32 +36,60 @@ public class Script_BasicEnemy : MonoBehaviour
         InitiateChase();
     }
 
+    private void FindClosestPlayer()
+    {
+        if (players == null)
+        {
+            GetPlayers();
+        }
+
+        GameObject closestPlayer = null;
+
+        foreach (GameObject player in players) 
+        {
+            if (closestPlayer == null || Vector3.Distance(gameObject.transform.position, player.transform.position) < Vector3.Distance(gameObject.transform.position, closestPlayer.transform.position))
+            {
+                closestPlayer = player;
+            }
+        }
+
+        navMeshAgent.destination = closestPlayer.transform.position;
+    }
+
     public void InitiateChase(){
-        navMeshAgent.destination = GameObject.FindGameObjectWithTag("Player").transform.position;
         StartCoroutine(StartChaseCycle());
     }
 
     IEnumerator StartChaseCycle(){
         yield return new WaitForSeconds(0.1f);
-        
+        FindClosestPlayer();
+
         if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance){
             Debug.Log("Reached Attack Trigger");
             GetComponent<Animator>().SetTrigger("Attack");
         }
 
         else {
-            navMeshAgent.destination = GameObject.FindGameObjectWithTag("Player").transform.position;
-
             StartCoroutine(StartChaseCycle());
         }
     }
 
     public void TakeDamage(float damageTaken, int pointsAdded){
-        health -= damageTaken;
+        float newHealth = health;
+        newHealth -= damageTaken;
 
-        if (health <= 0)
+        if (newHealth <= 0)
         {
             GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().EnemyDeathRpc(new NetworkObjectReference(gameObject), new NetworkObjectReference(NetworkManager.Singleton.LocalClient.PlayerObject), pointsAdded);
         }
+
+        else
+            SetHealthRpc(newHealth);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetHealthRpc(float newHealth)
+    {
+        health = newHealth;
     }
 }

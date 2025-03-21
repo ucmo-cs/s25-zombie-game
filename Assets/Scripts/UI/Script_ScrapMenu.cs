@@ -64,8 +64,8 @@ public class Script_ScrapMenu : MonoBehaviour
         entries.Clear();
 
         gameObject.GetComponentInParent<Image>().gameObject.SetActive(false);
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleCursor();
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Script_OtherControls>().ToggleInput(true);
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_OtherControls>().ToggleCursor();
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_OtherControls>().ToggleInput(true);
         mechanic.GetComponent<Script_Mechanic>().ReactivatePrompt();
         inMenu = false;
     }
