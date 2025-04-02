@@ -7,18 +7,8 @@ public class Script_Bar : MonoBehaviour, I_Interactable
     [SerializeField] TMP_Text prompt;
     [SerializeField] GameObject scrollViewUI;
 
-    private BoxCollider menuTrigger;
-
     private bool playerIsAtBar = false;
     public void SetPlayerIsAtBar(bool value) { playerIsAtBar = value; }
-
-    private void Start()
-    {
-        menuTrigger = gameObject.AddComponent<BoxCollider>();
-
-        menuTrigger.size = new Vector3(1.5f, 1.5f, 1.2f);
-        menuTrigger.isTrigger = true;
-    }
 
     private void OnTriggerEnter(Collider other)
     {

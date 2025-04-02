@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class Script_Saloon : MonoBehaviour
+public class Script_Saloon : NetworkBehaviour
 {
     [SerializeField] GameObject saloonDoor;
     [SerializeField] GameObject kickoutPoint;
@@ -29,9 +30,14 @@ public class Script_Saloon : MonoBehaviour
     public void KickOutPlayer(){
         if (playerInSaloon){
             Debug.Log("Kicking player out");
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
+            GameObject player = GameObject.FindGameObjectWithTag("LocalPlayer");
             player.GetComponent<CharacterController>().enabled = false;
-            player.transform.position = kickoutPoint.transform.position;
+
+            //Calculate kickout point depending on player clientid
+            Vector3 newKickout = new Vector3(kickoutPoint.transform.position.x, kickoutPoint.transform.position.y, 
+                kickoutPoint.transform.position.z + NetworkManager.LocalClientId);
+
+            player.transform.position = newKickout;
             player.GetComponent<CharacterController>().enabled = true;
             playerInSaloon = false;
             bar.SetPlayerIsAtBar(false);
@@ -47,14 +53,14 @@ public class Script_Saloon : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player"){
+        if (other.tag == "LocalPlayer"){
             playerInSaloon = true;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player"){
+        if (other.tag == "LocalPlayer"){
             playerInSaloon = false;
         }
     }

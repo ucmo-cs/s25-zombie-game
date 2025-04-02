@@ -1,10 +1,12 @@
 using System.Collections;
+using Unity.Cinemachine;
+using Unity.Netcode;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Script_BaseStats : MonoBehaviour
+public class Script_BaseStats : NetworkBehaviour
 {
     [Header("Basic Stats")]
     [SerializeField] float health = 150;
@@ -13,6 +15,8 @@ public class Script_BaseStats : MonoBehaviour
     private float maxHealth;
     private Coroutine lastRegenTimer;
     private Coroutine lastRegen;
+    public bool isDead = false;
+    public bool GetDeathStatus() { return isDead; }
 
     void Start()
     {
@@ -23,7 +27,9 @@ public class Script_BaseStats : MonoBehaviour
 
     public void TakeDamage(float damage){
         health -= damage;
-        Script_UIManager.Instance.healthBar.value = health;
+
+        if (tag == "LocalPlayer")
+            Script_UIManager.Instance.healthBar.value = health;
 
         if (lastRegenTimer != null)
         {
@@ -35,11 +41,30 @@ public class Script_BaseStats : MonoBehaviour
             StopCoroutine(lastRegen);
         }
 
-        StartRegen();
-
-        if (health <= 0){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        if (health <= 0)
+        {
+            GetComponentInChildren<CinemachineCamera>().enabled = false;
+            GetComponent<CharacterController>().enabled = false;
+            transform.position = new Vector3(NetworkManager.LocalClientId * 2, 0.3f, 0);
+            GetComponent<CharacterController>().enabled = true;
+            PlayerDeathRpc();
         }
+
+        else
+            StartRegen();
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void PlayerDeathRpc()
+    {
+        isDead = true;
+        GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().PlayerDeath(gameObject);
+        if (tag == "LocalPlayer")
+        {
+            Script_UIManager.Instance.ToggleGameplayUI(false);
+            GetComponent<Script_OtherControls>().SpectatorCamera();
+        }
+        gameObject.SetActive(false);
     }
 
     public void StartRegen()
@@ -67,8 +92,9 @@ public class Script_BaseStats : MonoBehaviour
             else
                 health += 10;
 
+            if (tag == "LocalPlayer")
+                Script_UIManager.Instance.healthBar.value = health;
 
-            Script_UIManager.Instance.healthBar.value = health;
             yield return new WaitForSeconds(0.1f);
             lastRegen = StartCoroutine(Regen());
         }
@@ -85,5 +111,18 @@ public class Script_BaseStats : MonoBehaviour
     public void UpgradeRegenTime(float value)
     {
         regenTimer = regenTimer - (regenTimer * value);
+    }
+
+    public void Revive()
+    {
+        isDead = false;
+        health = maxHealth;
+
+        if (tag == "LocalPlayer")
+        {
+            Script_UIManager.Instance.ToggleGameplayUI(true);
+            Script_UIManager.Instance.healthBar.value = health;
+            GetComponent<Script_OtherControls>().ReactivateCamera();
+        }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
@@ -22,11 +23,16 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField] TMP_Text roundUI;
     [SerializeField] TMP_Text roundTimerUI;
     [SerializeField] GameObject networkUI;
+    [SerializeField] GameObject backgroundUI;
 
     private int round = 0;
     private int currentSpawns = 0;
     private int enemiesLeft = 0;
     private bool isTransitioning = false;
+    private List<GameObject> players;
+    private List<GameObject> alivePlayers;
+    private List<GameObject> deadPlayers = new List<GameObject>();
+    public List<GameObject> GetPlayers() { return alivePlayers; }
 
     private void Start()
     {
@@ -38,15 +44,24 @@ public class Script_GameController : NetworkBehaviour
         if (NetworkManager.Singleton.LocalClientId != 0)
         {
             networkUI.SetActive(false);
-            NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
+            backgroundUI.GetComponentInChildren<TMP_Text>().enabled = true;
+            NetworkManager.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = false;
+            NetworkManager.LocalClient.PlayerObject.transform.position = new Vector3(NetworkManager.LocalClientId * 2, 10, 0);
+            NetworkManager.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = true;
         }
 
     }
-    public void StartGame()
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void StartGameRpc()
     {
         StartRound();
         networkUI.SetActive(false);
         NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
+        players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
+        players.Add(GameObject.FindGameObjectWithTag("LocalPlayer"));
+        alivePlayers = new List<GameObject>(players);
+        backgroundUI.SetActive(false);
     }
 
     public void StartRound()
@@ -58,14 +73,21 @@ public class Script_GameController : NetworkBehaviour
             enemiesLeft = spawnAmount;
             round++;
             StartCoroutine(SpawnCycle());
+            StartRoundRpc(round);
         }
-        StartRoundRpc(round);
     }
 
     [Rpc(SendTo.ClientsAndHost)]
     public void StartRoundRpc(int newRound)
     {
         roundUI.text = newRound.ToString();
+        foreach (GameObject player in deadPlayers)
+        {
+            player.SetActive(true);
+            player.GetComponent<Script_BaseStats>().Revive();
+            deadPlayers.Remove(player);
+            alivePlayers.Add(player);
+        }
     }
 
     IEnumerator SpawnCycle()
@@ -128,7 +150,8 @@ public class Script_GameController : NetworkBehaviour
         StartCoroutine(RoundTransition(time));
     }
 
-    public void EndRoundTransitionEarly()
+    [Rpc(SendTo.ClientsAndHost)]
+    public void EndRoundTransitionEarlyRpc()
     {
         if (isTransitioning)
         {
@@ -159,5 +182,13 @@ public class Script_GameController : NetworkBehaviour
                 StartCoroutine(RoundTransition(endTime));
             }
         }
+    }
+
+    public void PlayerDeath(GameObject player)
+    {
+        if (alivePlayers.Contains(player))
+            alivePlayers.Remove(player);
+        if (!deadPlayers.Contains(player))
+            deadPlayers.Add(player);
     }
 }

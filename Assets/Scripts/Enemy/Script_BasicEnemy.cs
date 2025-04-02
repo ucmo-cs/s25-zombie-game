@@ -15,7 +15,6 @@ public class Script_BasicEnemy : NetworkBehaviour
 
     public bool hasHit = false;
     private NavMeshAgent navMeshAgent;
-    private List<GameObject> players;
 
     void Start()
     {
@@ -25,12 +24,6 @@ public class Script_BasicEnemy : NetworkBehaviour
         InitiateChase();
     }
 
-    public void GetPlayers()
-    {
-        players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
-        players.Add(GameObject.FindGameObjectWithTag("LocalPlayer"));
-    }
-
     public void EndAttack(){
         hasHit = false;
         InitiateChase();
@@ -38,14 +31,10 @@ public class Script_BasicEnemy : NetworkBehaviour
 
     private void FindClosestPlayer()
     {
-        if (players == null)
-        {
-            GetPlayers();
-        }
 
         GameObject closestPlayer = null;
 
-        foreach (GameObject player in players) 
+        foreach (GameObject player in GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetPlayers()) 
         {
             if (closestPlayer == null || Vector3.Distance(gameObject.transform.position, player.transform.position) < Vector3.Distance(gameObject.transform.position, closestPlayer.transform.position))
             {
@@ -53,7 +42,13 @@ public class Script_BasicEnemy : NetworkBehaviour
             }
         }
 
-        navMeshAgent.destination = closestPlayer.transform.position;
+        if (closestPlayer != null)
+        {
+            navMeshAgent.destination = closestPlayer.transform.position;
+        }
+
+        else
+            FindClosestPlayer();
     }
 
     public void InitiateChase(){
