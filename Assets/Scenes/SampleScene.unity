@@ -665,6 +665,10 @@ MonoBehaviour:
   modHolder: {fileID: 1669126639}
   mechanic: {fileID: 1000663798}
   contentPrefab: {fileID: 8501288662958108009, guid: 3493a93fa020ad84ab1ce273b1ba2cd1, type: 3}
+  commonColor: {r: 0.6037736, g: 0.6037736, b: 0.6037736, a: 1}
+  rareColor: {r: 0.12775902, g: 0.6654549, b: 0.9339623, a: 1}
+  epicColor: {r: 0.83218336, g: 0.17702031, b: 0.9622642, a: 1}
+  legendaryColor: {r: 0.9716981, g: 0.88962525, b: 0.16958882, a: 1}
   inMenu: 0
 --- !u!1 &124776914
 GameObject:
@@ -3630,8 +3634,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1552735938}
   m_HandleRect: {fileID: 1552735937}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 0.99999994
+  m_Value: 1
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -7559,8 +7563,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 928680796}
   m_HandleRect: {fileID: 928680795}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999998
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10562,6 +10566,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1669126640}
   - component: {fileID: 1669126641}
+  - component: {fileID: 1669126644}
+  - component: {fileID: 1669126643}
+  - component: {fileID: 1669126642}
+  - component: {fileID: 1669126648}
+  - component: {fileID: 1669126647}
+  - component: {fileID: 1669126646}
+  - component: {fileID: 1669126645}
   m_Layer: 0
   m_Name: ModHolder
   m_TagString: Untagged
@@ -10596,9 +10607,102 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b07a5cbfad1b4b488ad0b26b8039333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _modColor: {r: 0.17132434, g: 0.6603774, b: 0.1953761, a: 1}
-  _modName: Extended Mag
-  _modDescription: Increases Clip Size by 2!
+  _rarity: 0
+--- !u!114 &1669126642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b07a5cbfad1b4b488ad0b26b8039333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 3
+--- !u!114 &1669126643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b07a5cbfad1b4b488ad0b26b8039333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 2
+--- !u!114 &1669126644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b07a5cbfad1b4b488ad0b26b8039333, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 1
+--- !u!114 &1669126645
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e0bf6b6f042d945ac23d1789991780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 3
+  debug: 0
+--- !u!114 &1669126646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e0bf6b6f042d945ac23d1789991780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 2
+  debug: 0
+--- !u!114 &1669126647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e0bf6b6f042d945ac23d1789991780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 1
+  debug: 0
+--- !u!114 &1669126648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669126639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5e0bf6b6f042d945ac23d1789991780, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rarity: 0
+  debug: 1
 --- !u!1 &1674995733
 GameObject:
   m_ObjectHideFlags: 0

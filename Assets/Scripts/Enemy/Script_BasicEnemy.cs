@@ -87,4 +87,13 @@ public class Script_BasicEnemy : NetworkBehaviour
     {
         health = newHealth;
     }
+
+    public IEnumerator ToggleKinematic(bool toggle, float timer)
+    {
+        yield return new WaitForSeconds(timer);
+
+        GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        GetComponent<Rigidbody>().isKinematic = toggle;
+    }
 }

@@ -1,10 +1,9 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using Unity.Netcode;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Script_BaseStats : NetworkBehaviour
 {
@@ -17,6 +16,15 @@ public class Script_BaseStats : NetworkBehaviour
     private Coroutine lastRegen;
     public bool isDead = false;
     public bool GetDeathStatus() { return isDead; }
+
+    // Mod Methods
+    public struct ReloadMechanics
+    {
+        public Action<float> method;
+        public float methodFloat;
+    }
+
+    private List<ReloadMechanics> reloadMethods = new List<ReloadMechanics>();
 
     void Start()
     {
@@ -123,6 +131,24 @@ public class Script_BaseStats : NetworkBehaviour
             Script_UIManager.Instance.ToggleGameplayUI(true);
             Script_UIManager.Instance.healthBar.value = health;
             GetComponent<Script_OtherControls>().ReactivateCamera();
+        }
+    }
+
+    public void AddReloadMethod(ReloadMechanics method)
+    {
+        reloadMethods.Add(method);
+    }
+
+    public void RemoveReloadMethod(ReloadMechanics method)
+    {
+        reloadMethods.Remove(method);
+    }
+
+    public void TriggerReloadMethods()
+    {
+        foreach (ReloadMechanics mechanics in reloadMethods)
+        {
+            mechanics.method(mechanics.methodFloat);
         }
     }
 }

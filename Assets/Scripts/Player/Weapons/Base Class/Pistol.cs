@@ -111,6 +111,7 @@ public class Pistol : MonoBehaviour
                 isReloading = true;
 
                 pistolModel.GetComponent<Animator>().SetTrigger("Reload");
+                GetComponentInParent<Script_BaseStats>().TriggerReloadMethods();
                 _input.reload = false;
             }
             else

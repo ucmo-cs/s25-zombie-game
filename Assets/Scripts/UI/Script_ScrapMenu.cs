@@ -9,6 +9,12 @@ public class Script_ScrapMenu : MonoBehaviour
     [SerializeField] GameObject modHolder;
     [SerializeField] GameObject mechanic;
     [SerializeField] GameObject contentPrefab;
+
+    [Header("Mod Colors")]
+    [SerializeField] Color commonColor;
+    [SerializeField] Color rareColor;
+    [SerializeField] Color epicColor;
+    [SerializeField] Color legendaryColor;
     public bool inMenu = false;
 
     private List<I_Mods> mods = new List<I_Mods>();
@@ -39,10 +45,28 @@ public class Script_ScrapMenu : MonoBehaviour
             I_Mods modSelected = modsThatCanBeSelected[new System.Random().Next(modsThatCanBeSelected.Count)];
             modsThatCanBeSelected.Remove(modSelected);
 
+            Color modColor = Color.black;
+
+            switch (modSelected.rarity)
+            {
+                case I_Mods.Rarity.Common:
+                    modColor = commonColor;
+                    break;
+                case I_Mods.Rarity.Rare:
+                    modColor = rareColor;
+                    break;
+                case I_Mods.Rarity.Epic:
+                    modColor = epicColor;
+                    break;
+                case I_Mods.Rarity.Legendary:
+                    modColor = legendaryColor;
+                    break;
+            }
+
             GameObject newContent = Instantiate(contentPrefab, transform);
 
             newContent.GetComponent<Script_ModInformation>().SetInformation(modSelected.modName, 
-                modSelected.modDescription, modSelected.modColor);
+                modSelected.modDescription, modColor);
 
             newContent.GetComponentInChildren<Button>().onClick.AddListener( delegate { AddMod(modSelected); });
             newContent.GetComponentInChildren<Button>().onClick.AddListener( delegate { Close(); });
