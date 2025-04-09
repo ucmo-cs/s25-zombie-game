@@ -58,7 +58,7 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
                 return;
             }
 
-            player.GetComponent<Script_PlayerUpgrades>().AddScrap(-scrapCost);
+            player.GetComponent<Script_PlayerUpgrades>().RemoveScrap(scrapCost);
             Debug.Log("Open scrap menu");
             contentUI.SetActive(true);
             prompt.enabled = false;

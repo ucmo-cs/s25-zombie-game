@@ -228,6 +228,7 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 3584738414585020241}
   TopClamp: 89
   BottomClamp: -89
+  currentSpeed: 0
 --- !u!114 &5150721584844284567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -447,7 +448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   points: 500
-  scrap: 0
+  scrap: 500
 --- !u!65 &8716748321754083688
 BoxCollider:
   m_ObjectHideFlags: 0

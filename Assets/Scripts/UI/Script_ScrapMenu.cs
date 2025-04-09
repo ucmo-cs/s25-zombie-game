@@ -23,7 +23,7 @@ public class Script_ScrapMenu : MonoBehaviour
 
     private void Start()
     {
-        mods = modHolder.GetComponents<I_Mods>().ToList();
+        mods = modHolder.GetComponentsInChildren<I_Mods>().ToList();
         mechanic.GetComponent<Script_Mechanic>().CloseMenu();
     }
 

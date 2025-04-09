@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System;
+using UnityEngine;
+using static Script_BaseStats;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -65,11 +69,14 @@ namespace StarterAssets
 		private float _fallTimeoutDelta;
 
 		// variables for upgrades
-        private float currentSpeed;
+        [SerializeField] private float currentSpeed;
 
-	
+        // Mod Methods
+        private List<Action> sprintMethods = new List<Action>();
+
+
 #if ENABLE_INPUT_SYSTEM
-		private PlayerInput _playerInput;
+        private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
 		private Input_Controller _input;
@@ -159,6 +166,14 @@ namespace StarterAssets
 		{
 			// set target speed based on move speed, sprint speed and if sprint is pressed
 			float targetSpeed = _input.sprint ? currentSpeed * SprintScale : currentSpeed;
+
+			if (_input.sprint)
+			{
+				foreach (Action action in sprintMethods)
+				{
+					action();
+				}
+			}
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -272,6 +287,26 @@ namespace StarterAssets
         public void UpgradeSpeed(float percentIncrease)
         {
             currentSpeed = BaseMoveSpeed * percentIncrease;
+        }
+
+		public void AddSpeed(float value)
+		{
+			currentSpeed += value;
+		}
+
+		public void RemoveSpeed(float value)
+		{
+			currentSpeed -= value;
+		}
+
+        public void AddSprintMethod(Action method)
+        {
+            sprintMethods.Add(method);
+        }
+
+        public void RemoveSprintMethod(Action method)
+        {
+            sprintMethods.Remove(method);
         }
     }
 }

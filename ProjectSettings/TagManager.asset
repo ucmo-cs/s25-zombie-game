@@ -11,6 +11,7 @@ TagManager:
   - UI Manager
   - Bar
   - LocalPlayer
+  - Mechanic
   layers:
   - Default
   - TransparentFX

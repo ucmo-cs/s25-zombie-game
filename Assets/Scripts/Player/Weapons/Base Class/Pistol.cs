@@ -25,6 +25,7 @@ public class Pistol : MonoBehaviour
 
     // Variables for upgrades
     private float currentDamage;
+    private float boostedDamage = 0;
     private float currentFireRate;
 
     private Camera FPCamera;
@@ -73,7 +74,7 @@ public class Pistol : MonoBehaviour
                     Debug.Log("Hit Object: " + hit.transform.gameObject.name);
                     Script_BasicEnemy enemy = null;
 
-                    float tempDamage = currentDamage;
+                    float tempDamage = currentDamage + boostedDamage;
                     int points = 0;
 
                     if(hit.transform.tag == "Enemy Head"){
@@ -90,6 +91,13 @@ public class Pistol : MonoBehaviour
                         Debug.Log(tempDamage);
                         enemy.TakeDamage(tempDamage, points);
                     }
+                }
+
+                boostedDamage = 0;
+
+                foreach (I_Mods_DamageBoost damageBoost in GameObject.FindGameObjectWithTag("Mechanic").GetComponentsInChildren<I_Mods_DamageBoost>())
+                {
+                    damageBoost.currentBonus = 0;
                 }
             }
         }
@@ -142,6 +150,11 @@ public class Pistol : MonoBehaviour
 
     public void UpgradeDamage(float percentIncrease){
         currentDamage = initDamage * percentIncrease;
+    }
+
+    public void BoostDamage(float amount)
+    {
+        boostedDamage += amount;
     }
 
     public void UpgradeFireRate(float percentIncrease)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Cinemachine;
 using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Script_BaseStats : NetworkBehaviour
@@ -103,6 +104,11 @@ public class Script_BaseStats : NetworkBehaviour
             if (tag == "LocalPlayer")
                 Script_UIManager.Instance.healthBar.value = health;
 
+            if (health == maxHealth)
+            {
+                yield break;
+            }
+
             yield return new WaitForSeconds(0.1f);
             lastRegen = StartCoroutine(Regen());
         }
@@ -150,5 +156,22 @@ public class Script_BaseStats : NetworkBehaviour
         {
             mechanics.method(mechanics.methodFloat);
         }
+    }
+
+    public void AddHealth(float value)
+    {
+        if (value + health <= maxHealth)
+        {
+            health += value;
+        }
+        else
+        {
+            health = maxHealth;
+            StopCoroutine(Regen());
+            StopCoroutine(RegenTimer());
+        }
+
+        if (tag == "LocalPlayer")
+            Script_UIManager.Instance.healthBar.value = health;
     }
 }
