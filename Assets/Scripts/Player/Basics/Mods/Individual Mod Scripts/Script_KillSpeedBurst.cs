@@ -1,4 +1,5 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
@@ -12,6 +13,7 @@ public class Script_KillSpeedBurst : MonoBehaviour, I_Mods
     string _modName;
     string _modDescription;
     [SerializeField] I_Mods.Rarity _rarity;
+    Action method;
 
     float speedBonus = 0;
     float bonusTime = 0;
@@ -20,6 +22,8 @@ public class Script_KillSpeedBurst : MonoBehaviour, I_Mods
 
     private void Start()
     {
+        method = delegate { KillSpeed(); };
+
         switch (rarity)
         {
             case I_Mods.Rarity.Common:
@@ -50,12 +54,12 @@ public class Script_KillSpeedBurst : MonoBehaviour, I_Mods
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().AddKillMethod(delegate { KillSpeed(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().AddKillMethod(method);
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().RemoveKillMethod(delegate { KillSpeed(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().RemoveKillMethod(method);
     }
 
     public void KillSpeed()

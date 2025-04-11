@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static Script_BaseStats;
 
 public class Pistol : MonoBehaviour
 {
@@ -26,10 +28,16 @@ public class Pistol : MonoBehaviour
     // Variables for upgrades
     private float currentDamage;
     private float boostedDamage = 0;
+    public float GetCurrentNextShotDamage() { return currentDamage + boostedDamage; }
     private float currentFireRate;
 
     private Camera FPCamera;
 
+    // Mod methods
+    List<Action> shootMethods = new List<Action>();
+    public bool vitalTargeting = false;
+    private float bloodshots = 0f;
+    public void SetBloodShots(float percentage) { bloodshots = percentage; }
 
     public void Awake(){
         currentAmmoAmount = clipSize;
@@ -63,6 +71,11 @@ public class Pistol : MonoBehaviour
         if(currentAmmoAmount != 0)
         {
             if(!isReloading && isShooting){
+                foreach (Action method in shootMethods)
+                {
+                    method();
+                }
+
                 currentAmmoAmount--;
                 Debug.Log("Shot Gun, Current Ammo: " + currentAmmoAmount);
                 RaycastHit hit;
@@ -77,7 +90,7 @@ public class Pistol : MonoBehaviour
                     float tempDamage = currentDamage + boostedDamage;
                     int points = 0;
 
-                    if(hit.transform.tag == "Enemy Head"){
+                    if(hit.transform.tag == "Enemy Head" || (hit.transform.tag == "Enemy" && vitalTargeting)){
                         tempDamage *= headshotMultiplier;
                         points = 100;
                         enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
@@ -89,6 +102,7 @@ public class Pistol : MonoBehaviour
 
                     if(enemy != null){
                         Debug.Log(tempDamage);
+                        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_BaseStats>().AddHealth(tempDamage * bloodshots);
                         enemy.TakeDamage(tempDamage, points);
                     }
                 }
@@ -159,11 +173,21 @@ public class Pistol : MonoBehaviour
 
     public void UpgradeFireRate(float percentIncrease)
     {
-        currentFireRate = initFireRate * percentIncrease;
+        currentFireRate += initFireRate * percentIncrease;
     }
 
     public void UpgradeReloadSpeed(float percentIncrease)
     {
         pistolModel.GetComponent<Script_WeaponAnimHandling>().SpeedUpReload(percentIncrease);
+    }
+
+    public void AddShootMethod(Action method)
+    {
+        shootMethods.Add(method);
+    }
+
+    public void RemoveShootMethod(Action method)
+    {
+        shootMethods.Remove(method);
     }
 }

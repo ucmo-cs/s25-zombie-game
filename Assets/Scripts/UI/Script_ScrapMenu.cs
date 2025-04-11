@@ -15,11 +15,16 @@ public class Script_ScrapMenu : MonoBehaviour
     [SerializeField] Color rareColor;
     [SerializeField] Color epicColor;
     [SerializeField] Color legendaryColor;
+    [SerializeField] Color exoticColor;
     public bool inMenu = false;
 
     private List<I_Mods> mods = new List<I_Mods>();
     private List<GameObject> entries = new List<GameObject>();
     private List<I_Mods> activeMods = new List<I_Mods>();
+    public List<I_Mods> GetMods() { return mods; }
+    public void SetMods(List<I_Mods> value) { mods = value; }
+    public void SetActiveMods(List<I_Mods> value) { activeMods = value; }
+    public List<I_Mods> GetActiveMods() { return activeMods; }
 
     private void Start()
     {
@@ -60,6 +65,9 @@ public class Script_ScrapMenu : MonoBehaviour
                     break;
                 case I_Mods.Rarity.Legendary:
                     modColor = legendaryColor;
+                    break;
+                case I_Mods.Rarity.EXOTIC:
+                    modColor = exoticColor;
                     break;
             }
 

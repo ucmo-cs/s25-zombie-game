@@ -2,7 +2,7 @@ using UnityEngine;
 
 public interface I_Mods
 {
-    public enum Rarity { Common, Rare, Epic, Legendary}
+    public enum Rarity { Common, Rare, Epic, Legendary, EXOTIC}
     public Rarity rarity { get; set; }
     public string modName {get; set;}
     public string modDescription {get; set;}

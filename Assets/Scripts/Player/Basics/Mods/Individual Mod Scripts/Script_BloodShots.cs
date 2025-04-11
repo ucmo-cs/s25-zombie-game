@@ -1,7 +1,7 @@
-using System;
 using UnityEngine;
+using System;
 
-public class Script_ExtendedMag : MonoBehaviour, I_Mods
+public class Script_BloodShots : MonoBehaviour, I_Mods
 {
     public I_Mods.Rarity rarity { get => _rarity; set => _rarity = value; }
     public string modName { get => _modName; set => _modName = value; }
@@ -11,37 +11,38 @@ public class Script_ExtendedMag : MonoBehaviour, I_Mods
     string _modDescription;
     [SerializeField] I_Mods.Rarity _rarity;
 
-    private int sizeIncrease;
+    private float percentage = 0;
 
     private void Start()
     {
+
         switch (rarity)
         {
             case I_Mods.Rarity.Common:
-                sizeIncrease = 2;
+                percentage = 0.05f;
                 break;
             case I_Mods.Rarity.Rare:
-                sizeIncrease = 4;
+                percentage = 0.15f;
                 break;
             case I_Mods.Rarity.Epic:
-                sizeIncrease = 6;
+                percentage = 0.25f;
                 break;
             case I_Mods.Rarity.Legendary:
-                sizeIncrease = 8;
+                percentage = 0.50f;
                 break;
         }
 
-        modName = "Extended Mag";
-        modDescription = "Increases Clip Size by " + sizeIncrease + "!";
+        modName = "Blood Shots";
+        modDescription = "Dealing damage will heal you " + (percentage * 100) + "% of the damage dealt!";
     }
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().clipSize += sizeIncrease;
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().SetBloodShots(percentage);
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().clipSize -= sizeIncrease;
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>().SetBloodShots(0);
     }
 }

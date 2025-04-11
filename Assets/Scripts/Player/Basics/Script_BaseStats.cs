@@ -16,6 +16,7 @@ public class Script_BaseStats : NetworkBehaviour
     private Coroutine lastRegenTimer;
     private Coroutine lastRegen;
     public bool isDead = false;
+    private bool invulnerable = false;
     public bool GetDeathStatus() { return isDead; }
 
     // Mod Methods
@@ -26,6 +27,8 @@ public class Script_BaseStats : NetworkBehaviour
     }
 
     private List<ReloadMechanics> reloadMethods = new List<ReloadMechanics>();
+    private List<Action> takeDamageMethods = new List<Action>();
+    public bool DeathTax = false;
 
     void Start()
     {
@@ -35,7 +38,17 @@ public class Script_BaseStats : NetworkBehaviour
     }
 
     public void TakeDamage(float damage){
+        if (invulnerable)
+        {
+            return;
+        }
+
         health -= damage;
+
+        foreach (Action action in takeDamageMethods)
+        {
+            action();
+        }
 
         if (tag == "LocalPlayer")
             Script_UIManager.Instance.healthBar.value = health;
@@ -52,15 +65,53 @@ public class Script_BaseStats : NetworkBehaviour
 
         if (health <= 0)
         {
-            GetComponentInChildren<CinemachineCamera>().enabled = false;
-            GetComponent<CharacterController>().enabled = false;
-            transform.position = new Vector3(NetworkManager.LocalClientId * 2, 0.3f, 0);
-            GetComponent<CharacterController>().enabled = true;
-            PlayerDeathRpc();
+            if (DeathTax)
+            {
+                health = 10;
+                if (tag == "LocalPlayer")
+                    Script_UIManager.Instance.healthBar.value = health;
+
+                DeathTax = false;
+                invulnerable = true;
+
+                I_Mods modToDestroy = null;
+
+                List<I_Mods> activeMods = GameObject.FindGameObjectWithTag("Mechanic").GetComponentInChildren<Script_Mechanic>().GetScrapHandler().GetActiveMods();
+                foreach (I_Mods mod in activeMods)
+                {
+                    if (mod.modName == "Death Tax")
+                    {
+                        modToDestroy = mod;
+                    }
+                }
+
+                if (modToDestroy != null)
+                {
+                    GameObject.FindGameObjectWithTag("Mechanic").GetComponentInChildren<Script_Mechanic>().GetScrapHandler().GetActiveMods().Remove(modToDestroy);
+                }
+
+                StartCoroutine(InvulernableBuffer());
+                StartRegen();
+            }
+
+            else
+            {
+                GetComponentInChildren<CinemachineCamera>().enabled = false;
+                GetComponent<CharacterController>().enabled = false;
+                transform.position = new Vector3(NetworkManager.LocalClientId * 2, 0.3f, 0);
+                GetComponent<CharacterController>().enabled = true;
+                PlayerDeathRpc();
+            }
         }
 
         else
             StartRegen();
+    }
+
+    IEnumerator InvulernableBuffer()
+    {
+        yield return new WaitForSeconds(2);
+        invulnerable = false;
     }
 
     [Rpc(SendTo.ClientsAndHost)]
@@ -148,6 +199,16 @@ public class Script_BaseStats : NetworkBehaviour
     public void RemoveReloadMethod(ReloadMechanics method)
     {
         reloadMethods.Remove(method);
+    }
+
+    public void AddTakeDamageMethod(Action method)
+    {
+        takeDamageMethods.Add(method);
+    }
+
+    public void RemoveTakeDamageMethod(Action method)
+    {
+        takeDamageMethods.Remove(method);
     }
 
     public void TriggerReloadMethods()

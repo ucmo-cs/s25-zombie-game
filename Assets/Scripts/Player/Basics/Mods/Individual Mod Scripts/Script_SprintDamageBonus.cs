@@ -1,4 +1,5 @@
 using StarterAssets;
+using System;
 using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,9 +19,12 @@ public class Script_SprintDamageBonus : MonoBehaviour, I_Mods, I_Mods_DamageBoos
     float maxBonus = 0;
     float boostBuffer = 0.01f;
     bool buffered = false;
+    Action method;
 
     private void Start()
     {
+        method = delegate { SprintBonus(); };
+
         switch (rarity)
         {
             case I_Mods.Rarity.Common:
@@ -43,12 +47,12 @@ public class Script_SprintDamageBonus : MonoBehaviour, I_Mods, I_Mods_DamageBoos
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<FirstPersonController>().AddSprintMethod(delegate { SprintBonus(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<FirstPersonController>().AddSprintMethod(method);
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<FirstPersonController>().RemoveSprintMethod(delegate { SprintBonus(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<FirstPersonController>().RemoveSprintMethod(method);
     }
 
     public void SprintBonus()

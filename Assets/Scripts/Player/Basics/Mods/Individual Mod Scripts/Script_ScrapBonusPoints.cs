@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Script_ScrapBonusPoints : MonoBehaviour, I_Mods
@@ -9,11 +10,14 @@ public class Script_ScrapBonusPoints : MonoBehaviour, I_Mods
     string _modName;
     string _modDescription;
     [SerializeField] I_Mods.Rarity _rarity;
+    Action method;
 
     int bonus = 0;
 
     private void Start()
     {
+        method = delegate { BonusScrap(); };
+
         switch (rarity)
         {
             case I_Mods.Rarity.Common:
@@ -36,12 +40,12 @@ public class Script_ScrapBonusPoints : MonoBehaviour, I_Mods
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().AddScrapMethod(delegate { BonusScrap(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().AddScrapMethod(method);
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().RemoveScrapMethod(delegate { BonusScrap(); });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_PlayerUpgrades>().RemoveScrapMethod(method);
     }
 
     public void BonusScrap()

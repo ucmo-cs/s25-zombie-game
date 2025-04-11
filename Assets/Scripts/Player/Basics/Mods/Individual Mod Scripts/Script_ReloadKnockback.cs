@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Script_ReloadKnockback : MonoBehaviour, I_Mods
@@ -9,6 +10,7 @@ public class Script_ReloadKnockback : MonoBehaviour, I_Mods
     string _modName;
     string _modDescription;
     [SerializeField] I_Mods.Rarity _rarity;
+    Script_BaseStats.ReloadMechanics method;
 
     private float knockbackForce;
     private string descriptor;
@@ -17,6 +19,8 @@ public class Script_ReloadKnockback : MonoBehaviour, I_Mods
 
     private void Start()
     {
+        method = new Script_BaseStats.ReloadMechanics { method = delegate { Knockback(knockbackForce); }, methodFloat = knockbackForce };
+
         switch (rarity)
         {
             case I_Mods.Rarity.Common:
@@ -43,12 +47,12 @@ public class Script_ReloadKnockback : MonoBehaviour, I_Mods
 
     public void Activate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_BaseStats>().AddReloadMethod(new Script_BaseStats.ReloadMechanics { method = delegate { Knockback(knockbackForce);  }, methodFloat = knockbackForce } );
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_BaseStats>().AddReloadMethod(method);
     }
 
     public void Deactivate()
     {
-        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_BaseStats>().RemoveReloadMethod(new Script_BaseStats.ReloadMechanics { method = delegate { Knockback(knockbackForce); }, methodFloat = knockbackForce });
+        GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Script_BaseStats>().RemoveReloadMethod(method);
     }
 
     public int Knockback(float knockbackAmount)

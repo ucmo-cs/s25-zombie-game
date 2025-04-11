@@ -84,4 +84,9 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     {
         prompt.enabled = false;
     }
+
+    public Script_ScrapMenu GetScrapHandler()
+    {
+        return contentUI.GetComponentInChildren<Script_ScrapMenu>();
+    }
 }

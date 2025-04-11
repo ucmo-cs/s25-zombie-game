@@ -26,6 +26,8 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField] GameObject backgroundUI;
 
     private int round = 0;
+    public int GetRound() { return round; }
+
     private int currentSpawns = 0;
     private int enemiesLeft = 0;
     private bool isTransitioning = false;
