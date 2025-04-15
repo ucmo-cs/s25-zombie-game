@@ -48,6 +48,7 @@ public class Script_Saloon : NetworkBehaviour
                 barMenu.Close();
             if (scrapMenu.isActiveAndEnabled)
                 scrapMenu.Close();
+            scrapMenu.CloseReplacementMenu();
         }
     }
 

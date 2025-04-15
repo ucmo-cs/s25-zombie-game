@@ -6,6 +6,7 @@ public interface I_Mods
     public Rarity rarity { get; set; }
     public string modName {get; set;}
     public string modDescription {get; set;}
+    public Sprite modIcon { get; set; }
 
     public void Activate();
     public void Deactivate();

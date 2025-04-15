@@ -1,8 +1,8 @@
 using StarterAssets;
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Script_SprintDamageBonus : MonoBehaviour, I_Mods, I_Mods_DamageBoost
 {
@@ -10,7 +10,9 @@ public class Script_SprintDamageBonus : MonoBehaviour, I_Mods, I_Mods_DamageBoos
     public string modName { get => _modName; set => _modName = value; }
     public string modDescription { get => _modDescription; set => _modDescription = value; }
     public float currentBonus { get => _currentBonus; set => _currentBonus = value; }
+    public Sprite modIcon { get => _modIcon; set => _modIcon = value; }
 
+    [SerializeField] Sprite _modIcon;
     string _modName;
     string _modDescription;
     [SerializeField] I_Mods.Rarity _rarity;
