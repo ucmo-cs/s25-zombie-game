@@ -17,6 +17,7 @@ public class Script_WeaponAnimHandling : MonoBehaviour
             pistol = GameObject.FindGameObjectWithTag("LocalPlayer").GetComponentInChildren<Pistol>();
         }
 
+        Debug.Log("Sending pistol reload");
         pistol.Reload();
     }
 }

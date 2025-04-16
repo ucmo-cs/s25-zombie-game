@@ -61,7 +61,7 @@ public class Script_BasicEnemy : NetworkBehaviour
 
         if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance){
             Debug.Log("Reached Attack Trigger");
-            GetComponent<Animator>().SetTrigger("Attack");
+            GetComponentInChildren<Animator>().SetTrigger("Attack");
         }
 
         else {

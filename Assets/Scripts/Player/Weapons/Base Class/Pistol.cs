@@ -10,7 +10,7 @@ using static Script_BaseStats;
 public class Pistol : MonoBehaviour
 {
     [Header("Basic Stats")]
-    [SerializeField] GameObject pistolModel;
+    [SerializeField] GameObject fpsArms;
     [SerializeField] float headshotMultiplier;
     [SerializeField] float initDamage;
     [SerializeField] float initFireRate;
@@ -132,7 +132,7 @@ public class Pistol : MonoBehaviour
             if (currentAmmoAmount < clipSize && !isReloading){
                 isReloading = true;
 
-                pistolModel.GetComponent<Animator>().SetTrigger("Reload");
+                fpsArms.GetComponent<Animator>().SetTrigger("Reload");
                 GetComponentInParent<Script_BaseStats>().TriggerReloadMethods();
                 _input.reload = false;
             }
@@ -178,7 +178,7 @@ public class Pistol : MonoBehaviour
 
     public void UpgradeReloadSpeed(float percentIncrease)
     {
-        pistolModel.GetComponent<Script_WeaponAnimHandling>().SpeedUpReload(percentIncrease);
+        fpsArms.GetComponent<Script_WeaponAnimHandling>().SpeedUpReload(percentIncrease);
     }
 
     public void AddShootMethod(Action method)

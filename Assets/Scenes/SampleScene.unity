@@ -675,6 +675,7 @@ MonoBehaviour:
   legendaryColor: {r: 0.9716981, g: 0.88962525, b: 0.16958882, a: 1}
   exoticColor: {r: 1, g: 0.19339621, b: 0.20114051, a: 1}
   inMenu: 0
+  modIcons: []
   modChances:
   - floatArr:
     - 100
@@ -918,7 +919,7 @@ MonoBehaviour:
   - {fileID: 124776916}
   - {fileID: 990582825}
   saloon: {fileID: 507213043}
-  enemyPrefab: {fileID: 8593213830178575757, guid: 21e37dcc3b81fe14da31b05705828526, type: 3}
+  enemyPrefab: {fileID: 542357293230838670, guid: e1665cd2bc5e68d478749559f6e72299, type: 3}
   scrapPrefab: {fileID: 2485526565337379194, guid: dbadf22e47f852047bb021a7112350b8, type: 3}
   roundUI: {fileID: 1026089147}
   roundTimerUI: {fileID: 759268147}
@@ -4431,7 +4432,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1552735938}
   m_HandleRect: {fileID: 1552735937}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -14519,7 +14520,7 @@ Transform:
   m_GameObject: {fileID: 1927930089}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5649999, z: 0}
+  m_LocalPosition: {x: -3.4616095e-16, y: 1.2486504, z: 0.027010001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
