@@ -4,6 +4,8 @@ public class Script_WeaponAnimHandling : MonoBehaviour
 {
     private Pistol pistol;
     private float reloadSpeed = 1;
+    [SerializeField] private ParticleSystem muzzleFlash;
+    [SerializeField] private AudioSource gunShotAudio;
 
     public void SpeedUpReload(float percentIncrease)
     {
@@ -19,5 +21,10 @@ public class Script_WeaponAnimHandling : MonoBehaviour
 
         Debug.Log("Sending pistol reload");
         pistol.Reload();
+    }
+    public void TriggerMuzzleFlash()
+    {
+        muzzleFlash.Play();
+        gunShotAudio.Play();
     }
 }

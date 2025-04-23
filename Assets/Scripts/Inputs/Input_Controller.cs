@@ -19,6 +19,9 @@ using UnityEngine.InputSystem;
 		public bool interact;
 		public bool endRound;
 
+		[Space(10)]
+		public bool chatbox;
+
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
@@ -72,6 +75,11 @@ using UnityEngine.InputSystem;
 		{
 			InteractInput(value.isPressed);
 		}
+
+		public void OnChatBox(InputValue value)
+		{
+			ChatboxInput(value.isPressed);
+		}
 #endif
 
 
@@ -114,7 +122,12 @@ using UnityEngine.InputSystem;
 			interact = newInteractState;
 		}
 
-		private void OnApplicationFocus(bool hasFocus)
+		public void ChatboxInput(bool newInteractState)
+		{
+			chatbox = newInteractState;
+		}
+
+    private void OnApplicationFocus(bool hasFocus)
 			{
 				if (Cursor.lockState == CursorLockMode.Locked)
 					SetCursorState(cursorLocked);

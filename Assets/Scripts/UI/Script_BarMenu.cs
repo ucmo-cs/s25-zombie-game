@@ -7,7 +7,10 @@ public class Script_BarMenu : MonoBehaviour
     [SerializeField] GameObject bar;
     [SerializeField] GameObject contentPrefab;
     public bool inMenu = false;
-    private Script_PlayerShots shots; 
+    private Script_PlayerShots shots;
+
+    [Header("Audio")]
+    [SerializeField] AudioSource buySFX;
 
     private List<GameObject> entires = new List<GameObject>();
 
@@ -52,6 +55,7 @@ public class Script_BarMenu : MonoBehaviour
             }
 
             newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { CheckPrices(); } );
+            newContent.GetComponentInChildren<Button>().onClick.AddListener(delegate { PlaySFX(); });
         }
 
         bar.GetComponent<Script_Bar>().CloseMenu();
@@ -71,5 +75,10 @@ public class Script_BarMenu : MonoBehaviour
         GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_OtherControls>().ToggleInput(true);
         bar.GetComponent<Script_Bar>().ReactivatePrompt();
         inMenu = false;
+    }
+
+    public void PlaySFX()
+    {
+        buySFX.Play();
     }
 }

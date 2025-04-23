@@ -76,7 +76,9 @@ public class Script_BaseStats : NetworkBehaviour
 
                 I_Mods modToDestroy = null;
 
-                List<I_Mods> activeMods = GameObject.FindGameObjectWithTag("Mechanic").GetComponentInChildren<Script_Mechanic>().GetScrapHandler().GetActiveMods();
+                Script_Mechanic mechanicScript = GameObject.FindGameObjectWithTag("Mechanic").GetComponentInChildren<Script_Mechanic>();
+
+                List<I_Mods> activeMods = mechanicScript.GetScrapHandler().GetActiveMods();
                 foreach (I_Mods mod in activeMods)
                 {
                     if (mod.modName == "Death Tax")
@@ -87,6 +89,9 @@ public class Script_BaseStats : NetworkBehaviour
 
                 if (modToDestroy != null)
                 {
+                    GameObject modIcon = mechanicScript.GetScrapHandler().modIcons[mechanicScript.GetScrapHandler().GetActiveMods().IndexOf(modToDestroy)];
+                    mechanicScript.GetScrapHandler().modIcons.Remove(modIcon);
+                    Destroy(modIcon);
                     GameObject.FindGameObjectWithTag("Mechanic").GetComponentInChildren<Script_Mechanic>().GetScrapHandler().GetActiveMods().Remove(modToDestroy);
                 }
 

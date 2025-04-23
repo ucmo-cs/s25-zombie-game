@@ -6,11 +6,15 @@ using UnityEngine.UI;
 public class Script_Mechanic : MonoBehaviour, I_Interactable
 {
     [Header("Requirements")]
-    [SerializeField] int scrapCost = 10;
+    [SerializeField] int initScrapCost = 10;
+    [SerializeField] int currentScrapCost = 10;
 
     [Header("UI")]
     [SerializeField] TMP_Text prompt;
     [SerializeField] GameObject contentUI;
+
+    [Header("Audio")]
+    [SerializeField] public AudioSource buySFX;
 
     private BoxCollider menuTrigger;
 
@@ -20,7 +24,7 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     private void Start()
     {
         menuTrigger = gameObject.AddComponent<BoxCollider>();
-        prompt.text = "Press E to open scrap menu [Cost: " + scrapCost + "]";
+        prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
 
         menuTrigger.size = new Vector3(1.5f, 1.5f, 1.5f);
         menuTrigger.isTrigger = true;
@@ -52,13 +56,15 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
 
         if (playerIsAtMech)
         {
-            if (player.GetComponent<Script_PlayerUpgrades>().GetScrap() < scrapCost)
+            if (player.GetComponent<Script_PlayerUpgrades>().GetScrap() < currentScrapCost)
             {
                 Debug.Log("Not enough scrap to open menu");
                 return;
             }
 
-            player.GetComponent<Script_PlayerUpgrades>().RemoveScrap(scrapCost);
+            player.GetComponent<Script_PlayerUpgrades>().RemoveScrap(currentScrapCost);
+            currentScrapCost *= 2;
+            prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
             Debug.Log("Open scrap menu");
             contentUI.SetActive(true);
             prompt.enabled = false;
@@ -88,5 +94,11 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     public Script_ScrapMenu GetScrapHandler()
     {
         return contentUI.GetComponentInChildren<Script_ScrapMenu>();
+    }
+
+    public void ResetScrapCost()
+    {
+        currentScrapCost = initScrapCost;
+        prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
     }
 }

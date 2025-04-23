@@ -10,6 +10,7 @@ public class Script_UIManager : MonoBehaviour
     [SerializeField] public TMP_Text scrapText;
     [SerializeField] public Slider healthBar;
     [SerializeField] Button startGameButton;
+    [SerializeField] public TMP_Text gunInfoText;
 
     public static Script_UIManager Instance { get; private set; }
 

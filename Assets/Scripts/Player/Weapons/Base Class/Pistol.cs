@@ -1,11 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static Script_BaseStats;
 
 public class Pistol : MonoBehaviour
 {
@@ -14,13 +10,44 @@ public class Pistol : MonoBehaviour
     [SerializeField] float headshotMultiplier;
     [SerializeField] float initDamage;
     [SerializeField] float initFireRate;
-    [SerializeField] public int clipSize;
-    [SerializeField] public int currentAmmoAmount;
+    [SerializeField] public int clipSize
+    {
+        get
+        {
+            return _clipSize;
+        }
+        set
+        {
+            _clipSize = value;
+            GameObject.FindGameObjectWithTag("UI Manager").GetComponent<Script_UIManager>().gunInfoText.text = _currentAmmoAmount + "/" + _clipSize;
+        }
+    }
+
+    int _clipSize = 6;
+
+    [SerializeField] public int currentAmmoAmount
+    {
+        get
+        {
+            return _currentAmmoAmount;
+        }
+        set
+        {
+            _currentAmmoAmount = value;
+            GameObject.FindGameObjectWithTag("UI Manager").GetComponent<Script_UIManager>().gunInfoText.text = _currentAmmoAmount + "/" + _clipSize;
+        }
+    }
+
+    int _currentAmmoAmount = 6;
 
     // Animation Variables
     private bool isReloading;
     [SerializeField] private bool isShooting;
     [SerializeField] private bool canNotShoot;
+
+    // VFX Variables
+    [Header("VFX")]
+    [SerializeField] GameObject fleshHitEffect;
 
     // Input Variables
     private Input_Controller _input;
@@ -77,6 +104,7 @@ public class Pistol : MonoBehaviour
                 }
 
                 currentAmmoAmount--;
+                fpsArms.GetComponent<Animator>().SetTrigger("Shoot");
                 Debug.Log("Shot Gun, Current Ammo: " + currentAmmoAmount);
                 RaycastHit hit;
                 Vector3 direction = GetShootingDirection();
@@ -90,6 +118,8 @@ public class Pistol : MonoBehaviour
                     float tempDamage = currentDamage + boostedDamage;
                     int points = 0;
 
+                    GameObject fleshHit = Instantiate(fleshHitEffect, hit.point, Quaternion.FromToRotation(this.transform.position, hit.normal), hit.transform);
+
                     if(hit.transform.tag == "Enemy Head" || (hit.transform.tag == "Enemy" && vitalTargeting)){
                         tempDamage *= headshotMultiplier;
                         points = 100;
@@ -97,7 +127,7 @@ public class Pistol : MonoBehaviour
                     }
                     else if (hit.transform.tag == "Enemy"){
                         points = 50;
-                        enemy = hit.transform.GetComponent<Script_BasicEnemy>();
+                        enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
                     }
 
                     if(enemy != null){
@@ -174,6 +204,7 @@ public class Pistol : MonoBehaviour
     public void UpgradeFireRate(float percentIncrease)
     {
         currentFireRate += initFireRate * percentIncrease;
+        fpsArms.GetComponent<Animator>().SetFloat("FireRate", 1 + (currentFireRate - initFireRate));
     }
 
     public void UpgradeReloadSpeed(float percentIncrease)

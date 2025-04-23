@@ -1,6 +1,8 @@
+using TMPro;
 using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class Script_OtherControls : NetworkBehaviour
@@ -10,6 +12,9 @@ public class Script_OtherControls : NetworkBehaviour
     // Input Variables
     [SerializeField] private Input_Controller _input;
 
+    GameObject chatInput;
+    GameObject chatText;
+
     private CinemachineCamera currentSpectator = null;
 
     private void Start()
@@ -18,6 +23,12 @@ public class Script_OtherControls : NetworkBehaviour
         {
             gameObject.tag = "LocalPlayer";
         }
+
+        chatInput = GameObject.FindGameObjectWithTag("Chat Input");
+        chatInput.gameObject.SetActive(false);
+
+
+        chatText = GameObject.FindGameObjectWithTag("Chat Text");
     }
 
     public void EnableInput()
@@ -64,6 +75,7 @@ public class Script_OtherControls : NetworkBehaviour
         {
             SkipTimer();
             CheckInteract();
+            CheckChat();
         }
     }
 
@@ -86,6 +98,22 @@ public class Script_OtherControls : NetworkBehaviour
                 currentInteractable.OnInteract();
             }
             _input.interact = false;
+        }
+    }
+
+    public void CheckChat()
+    {
+        if (_input.chatbox == true)
+        {
+            chatInput.SetActive(true);
+
+            EventSystem.current.SetSelectedGameObject(null);
+            EventSystem.current.SetSelectedGameObject(chatInput);
+
+            _input.SetCursorState(false);
+            GetComponent<PlayerInput>().SwitchCurrentActionMap("UI");
+
+            _input.chatbox = false;
         }
     }
 

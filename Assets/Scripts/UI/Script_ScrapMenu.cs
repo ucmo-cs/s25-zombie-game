@@ -136,6 +136,11 @@ public class Script_ScrapMenu : MonoBehaviour
 
             List<I_Mods> modsSelectableThisRound = modsThatCanBeSelected.Intersect(activeSet).ToList();
 
+            if (modsSelectableThisRound.Count == 0)
+            {
+                modsSelectableThisRound = modsThatCanBeSelected;
+            }
+
             I_Mods modSelected = modsSelectableThisRound[new System.Random().Next(modsSelectableThisRound.Count)];
             modsThatCanBeSelected.Remove(modSelected);
 
@@ -243,6 +248,7 @@ public class Script_ScrapMenu : MonoBehaviour
         modIcon.GetComponent<Image>().color = modColor;
         modIcons.Add(modIcon);
         modToAdd.Activate();
+        mechanic.GetComponent<Script_Mechanic>().buySFX.Play();
 
         Close();
     }

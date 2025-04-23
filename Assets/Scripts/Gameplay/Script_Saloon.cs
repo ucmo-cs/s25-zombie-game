@@ -65,4 +65,9 @@ public class Script_Saloon : NetworkBehaviour
             playerInSaloon = false;
         }
     }
+
+    public void ResetScrapCost()
+    {
+        mechanic.ResetScrapCost();
+    }
 }

@@ -12,15 +12,17 @@ TagManager:
   - Bar
   - LocalPlayer
   - Mechanic
+  - Chat Input
+  - Chat Text
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
+  - Enemy
+  - Player
   - 
   - 
   - 

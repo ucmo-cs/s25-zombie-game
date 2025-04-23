@@ -72,7 +72,7 @@ public class Script_ReloadKnockback : MonoBehaviour, I_Mods
                 Vector3 direction = collider.transform.position - player.transform.position;
                 collider.GetComponent<Rigidbody>().isKinematic = false;
                 collider.GetComponent<Rigidbody>().AddForceAtPosition(direction.normalized * knockbackAmount, collider.transform.position, ForceMode.Impulse);
-                collider.GetComponent<Script_BasicEnemy>().ToggleKinematic(true, 2);
+                StartCoroutine(collider.GetComponent<Script_BasicEnemy>().ToggleKinematic(true, 2));
             }
         }
 

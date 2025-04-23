@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 80d85b4caad0aa54e9b626035c82349f, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 80d85b4caad0aa54e9b626035c82349f, type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 80d85b4caad0aa54e9b626035c82349f, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 80d85b4caad0aa54e9b626035c82349f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -112,14 +112,14 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.021612043, y: 0.054621737, z: 0.027775293}
-  m_Center: {x: 0, y: -0.0024963268, z: -0.0015081849}
+  m_Size: {x: 0.038987145, y: 0.07999999, z: 0.034676358}
+  m_Center: {x: 0.0005451938, y: -0.0024963296, z: -0.001378537}
 --- !u!65 &3406162849532771780
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -133,7 +133,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -160,7 +160,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1

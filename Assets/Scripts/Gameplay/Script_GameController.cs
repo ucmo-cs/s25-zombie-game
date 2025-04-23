@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class Script_GameController : NetworkBehaviour
 {
     [Header("Gameplay Settings")]
     [SerializeField] float spawnIntervals = 1f;
+    [SerializeField] int initSpawnAmount = 6;
     [SerializeField] int spawnAmount = 6;
     [SerializeField] int spawnIncreaseIncrements = 2;
     [SerializeField]
@@ -25,7 +29,18 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField] GameObject networkUI;
     [SerializeField] GameObject backgroundUI;
 
+    [Header("End Game")]
+    [SerializeField] GameObject endGameCamera;
+    [SerializeField] TMP_Text gameEndText;
+
+    [Header("Audio")]
+    [SerializeField] AudioSource menuMusicSource;
+    [SerializeField] AudioSource gameplayMusic;
+    [SerializeField] AudioSource gameOverMusic;
+    [SerializeField] private float crossoverFadeTime = 3f;
+
     private int round = 0;
+    private int debugNextRound = 0;
     public int GetRound() { return round; }
 
     private int currentSpawns = 0;
@@ -38,6 +53,8 @@ public class Script_GameController : NetworkBehaviour
 
     private void Start()
     {
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
         NetworkManager.Singleton.OnClientConnectedCallback += ClientConnectedCallback;
     }
 
@@ -58,6 +75,10 @@ public class Script_GameController : NetworkBehaviour
     public void StartGameRpc()
     {
         StartRound();
+
+        StartCoroutine(MixAudioSources(menuMusicSource, true));
+        StartCoroutine(MixAudioSources(gameplayMusic, false));
+
         networkUI.SetActive(false);
         NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
         players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
@@ -68,12 +89,21 @@ public class Script_GameController : NetworkBehaviour
 
     public void StartRound()
     {
+        if (debugNextRound > 0)
+        {
+            round = debugNextRound;
+            debugNextRound = 0;
+        }
+        else
+        {
+            round++;
+        }
+
         if (NetworkManager.IsServer)
         {
-            spawnAmount += spawnIncreaseIncrements;
+            spawnAmount = initSpawnAmount + (spawnIncreaseIncrements * round);
             currentSpawns = 0;
             enemiesLeft = spawnAmount;
-            round++;
             StartCoroutine(SpawnCycle());
             StartRoundRpc(round);
         }
@@ -83,6 +113,7 @@ public class Script_GameController : NetworkBehaviour
     public void StartRoundRpc(int newRound)
     {
         roundUI.text = newRound.ToString();
+        saloon.GetComponent<Script_Saloon>().ResetScrapCost();
         foreach (GameObject player in deadPlayers)
         {
             player.SetActive(true);
@@ -112,14 +143,14 @@ public class Script_GameController : NetworkBehaviour
     public void EnemyDeathRpc(NetworkObjectReference enemy, NetworkObjectReference playerThatKilled, int pointsAdded)
     {
         GameObject enemyGameObject = enemy;
-        Transform scrapPosition = enemyGameObject.transform;
+        Transform scrapPosition = enemyGameObject.GetComponent<Script_BasicEnemy>().scrapSpawnPoint.transform;
 
         Debug.Log("Enemy has died");
 
         GameObject playerCredit = playerThatKilled;
         playerCredit.GetComponent<Script_PlayerUpgrades>().AddPointsRpc(pointsAdded);
 
-        Destroy(enemyGameObject);
+        enemyGameObject.GetComponent<Script_BasicEnemy>().RagDollRpc();
         if (UnityEngine.Random.Range(1, 10) <= 2)
         {
             Debug.Log("Enemy has dropped scrap");
@@ -192,5 +223,65 @@ public class Script_GameController : NetworkBehaviour
             alivePlayers.Remove(player);
         if (!deadPlayers.Contains(player))
             deadPlayers.Add(player);
+
+        if (alivePlayers.Count == 0)
+        {
+            foreach (GameObject deadPlayer in deadPlayers)
+            {
+                deadPlayer.SetActive(false);
+            }
+
+            gameEndText.text = "You survived " + (round - 1) + " waves!";
+
+
+
+            StartCoroutine(MixAudioSources(gameplayMusic, true));
+            StartCoroutine(MixAudioSources(gameOverMusic, false));
+
+            endGameCamera.GetComponent<CinemachineCamera>().enabled = true;
+            endGameCamera.GetComponent<PlayableDirector>().Play();
+        }
+    }
+
+    public void EndGame()
+    {
+        NetworkManager.Singleton.Shutdown();
+
+        SceneManager.LoadScene(0);
+    }
+
+    IEnumerator MixAudioSources(AudioSource source, bool current)
+    {
+        if (current)
+        {
+
+            float percentage = 0;
+            while (source.volume > 0)
+            {
+                source.volume = Mathf.Lerp(0.3f, 0, percentage);
+                percentage += Time.deltaTime / crossoverFadeTime;
+                yield return null;
+            }
+
+            source.Stop();
+        }
+
+        else
+        {
+            float percentage = 0;
+            source.Play();
+            while (source.volume < 0.3)
+            {
+                source.volume = Mathf.Lerp(0f, 0.3f, percentage);
+                percentage += Time.deltaTime / crossoverFadeTime;
+                yield return null;
+            }
+        }
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void DebugNextRoundRpc(int nextRound)
+    {
+        debugNextRound = nextRound;
     }
 }
