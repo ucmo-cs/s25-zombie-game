@@ -24,6 +24,9 @@ public class Script_BasicEnemy : NetworkBehaviour
     [SerializeField] GameObject floatingDamageSpawnPoint;
     [SerializeField] GameObject floatingDamagePrefab;
 
+    private int randRunAnim;
+    int randAttackAnim;
+
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -38,7 +41,9 @@ public class Script_BasicEnemy : NetworkBehaviour
         navMeshAgent.speed = speed;
         GetComponent<Animator>().SetFloat("AttackSpeed", attackSpeed);
 
-        int randRunAnim = Random.Range(0, 3);
+        if (IsServer)
+            SetRandRunAnimRpc(Random.Range(0, 3));
+
         GetComponent<Animator>().SetFloat("RandRun", randRunAnim);
 
         GetComponent<Animator>().SetFloat("MoveSpeed", speedIncrease);
@@ -91,7 +96,11 @@ public class Script_BasicEnemy : NetworkBehaviour
 
         if (navMeshAgent.remainingDistance <= navMeshAgent.stoppingDistance)
         {
-            int randAttackAnim = Random.Range(0, 3);
+            if (IsServer)
+            {
+                SetRandAttackAnimRpc(Random.Range(0, 3));
+            }
+
             GetComponent<Animator>().SetFloat("RandAttack", randAttackAnim);
 
             Debug.Log("Reached Attack Trigger");
@@ -153,9 +162,22 @@ public class Script_BasicEnemy : NetworkBehaviour
         foreach (Rigidbody rigidbody in rigidbodies)
         {
             rigidbody.isKinematic = false;
+            rigidbody.excludeLayers = LayerMask.GetMask("Player");
         }
 
         if (IsServer)
             Destroy(gameObject, 10f);
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetRandRunAnimRpc(int value)
+    {
+        randRunAnim = value;
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetRandAttackAnimRpc(int value)
+    {
+        randAttackAnim = value;
     }
 }

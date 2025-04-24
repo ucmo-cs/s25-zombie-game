@@ -14,6 +14,7 @@ TagManager:
   - Mechanic
   - Chat Input
   - Chat Text
+  - Session Manager
   layers:
   - Default
   - TransparentFX

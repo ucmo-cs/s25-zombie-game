@@ -4,6 +4,11 @@ using System.Linq;
 using TMPro;
 using Unity.Cinemachine;
 using Unity.Netcode;
+using Unity.Netcode.Transports.UTP;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.Multiplayer;
+using Unity.Services.Relay;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
@@ -18,6 +23,7 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField]
     Script_Spawner[] spawns = new Script_Spawner[0];
     [SerializeField] Script_Saloon saloon;
+    public GameObject deathTransportPos;
 
     [Header("Enemy Settings")]
     [SerializeField] GameObject enemyPrefab;
@@ -27,7 +33,6 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField] TMP_Text roundUI;
     [SerializeField] TMP_Text roundTimerUI;
     [SerializeField] GameObject networkUI;
-    [SerializeField] GameObject backgroundUI;
 
     [Header("End Game")]
     [SerializeField] GameObject endGameCamera;
@@ -62,8 +67,7 @@ public class Script_GameController : NetworkBehaviour
     {
         if (NetworkManager.Singleton.LocalClientId != 0)
         {
-            networkUI.SetActive(false);
-            backgroundUI.GetComponentInChildren<TMP_Text>().enabled = true;
+            Script_UIManager.Instance.SwitchToLobbyUI(false);
             NetworkManager.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = false;
             NetworkManager.LocalClient.PlayerObject.transform.position = new Vector3(NetworkManager.LocalClientId * 2, 10, 0);
             NetworkManager.LocalClient.PlayerObject.GetComponent<CharacterController>().enabled = true;
@@ -74,17 +78,29 @@ public class Script_GameController : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void StartGameRpc()
     {
+        if (IsServer)
+        {
+            Script_SessionHandler.Instance.LockSession();
+        }
+
+        currentSpawns = 0;
+        enemiesLeft = 0;
+        isTransitioning = false;
+        round = 0;
+
         StartRound();
 
         StartCoroutine(MixAudioSources(menuMusicSource, true));
         StartCoroutine(MixAudioSources(gameplayMusic, false));
 
-        networkUI.SetActive(false);
+        GameObject.FindGameObjectWithTag("Chat Input").gameObject.SetActive(false);
+
+        Script_UIManager.Instance.ToggleNetworkUI(false);
         NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
+        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_BaseStats>().SetNameRpc(AuthenticationService.Instance.PlayerName);
         players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
         players.Add(GameObject.FindGameObjectWithTag("LocalPlayer"));
         alivePlayers = new List<GameObject>(players);
-        backgroundUI.SetActive(false);
     }
 
     public void StartRound()
@@ -116,11 +132,10 @@ public class Script_GameController : NetworkBehaviour
         saloon.GetComponent<Script_Saloon>().ResetScrapCost();
         foreach (GameObject player in deadPlayers)
         {
-            player.SetActive(true);
-            player.GetComponent<Script_BaseStats>().Revive();
-            deadPlayers.Remove(player);
+            player.GetComponent<Script_BaseStats>().Revive(new Vector3(NetworkManager.LocalClientId * 2, 10, 0));
             alivePlayers.Add(player);
         }
+        deadPlayers.Clear();
     }
 
     IEnumerator SpawnCycle()
@@ -234,20 +249,27 @@ public class Script_GameController : NetworkBehaviour
             gameEndText.text = "You survived " + (round - 1) + " waves!";
 
 
-
             StartCoroutine(MixAudioSources(gameplayMusic, true));
             StartCoroutine(MixAudioSources(gameOverMusic, false));
+            Script_UIManager.Instance.DisableSpectatorCamera();
+            Script_UIManager.Instance.ToggleSpectatorUI(false);
 
             endGameCamera.GetComponent<CinemachineCamera>().enabled = true;
             endGameCamera.GetComponent<PlayableDirector>().Play();
+        }
+
+        else if (GameObject.FindGameObjectWithTag("LocalPlayer") == null)
+        {
+            Script_UIManager.Instance.CheckSpectatorCamera();
         }
     }
 
     public void EndGame()
     {
-        NetworkManager.Singleton.Shutdown();
-
-        SceneManager.LoadScene(0);
+        if (IsServer)
+        {
+            NetworkManager.SceneManager.LoadScene("GameplayScene", LoadSceneMode.Single);
+        }
     }
 
     IEnumerator MixAudioSources(AudioSource source, bool current)
@@ -283,5 +305,10 @@ public class Script_GameController : NetworkBehaviour
     public void DebugNextRoundRpc(int nextRound)
     {
         debugNextRound = nextRound;
+    }
+
+    public void SetSessionInfo(ISession session)
+    {
+        Script_SessionHandler.Instance.SetActiveSession(session);
     }
 }

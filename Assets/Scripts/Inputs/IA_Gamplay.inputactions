@@ -864,18 +864,9 @@
             "id": "9197c126-b7af-47d1-a9bd-34737bfe7ee4",
             "actions": [
                 {
-                    "name": "Send Text",
+                    "name": "ChatBox",
                     "type": "Button",
                     "id": "f5d454f6-aea4-48c2-a62f-b95e788b5f96",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Exit Textbox",
-                    "type": "Button",
-                    "id": "58b7b54b-fcb6-4b58-a27a-3d6f377a00fe",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -890,18 +881,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Send Text",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b4b97e20-0e8c-4f32-993c-e526fa57e34c",
-                    "path": "<Keyboard>/escape",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Exit Textbox",
+                    "action": "ChatBox",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -15,20 +15,15 @@ public class Script_OtherControls : NetworkBehaviour
     GameObject chatInput;
     GameObject chatText;
 
-    private CinemachineCamera currentSpectator = null;
-
     private void Start()
     {
         if (IsLocalPlayer)
         {
             gameObject.tag = "LocalPlayer";
+
+            chatInput = GameObject.FindGameObjectWithTag("Chat Input");
+            chatText = GameObject.FindGameObjectWithTag("Chat Text");
         }
-
-        chatInput = GameObject.FindGameObjectWithTag("Chat Input");
-        chatInput.gameObject.SetActive(false);
-
-
-        chatText = GameObject.FindGameObjectWithTag("Chat Text");
     }
 
     public void EnableInput()
@@ -55,17 +50,9 @@ public class Script_OtherControls : NetworkBehaviour
         }
     }
 
-    public void SpectatorCamera()
-    {
-        GetComponentInChildren<CinemachineCamera>().enabled = false;
-        currentSpectator = GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<CinemachineCamera>();
-        currentSpectator.enabled = true;
-    }
-
     public void ReactivateCamera()
     {
-        currentSpectator.enabled = false;
-        currentSpectator = null;
+        Script_UIManager.Instance.DisableSpectatorCamera();
         GetComponentInChildren<CinemachineCamera>().enabled = true;
     }
 

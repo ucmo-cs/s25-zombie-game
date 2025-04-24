@@ -1,17 +1,26 @@
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class Script_ChatInput : MonoBehaviour
+public class Script_ChatInput : NetworkBehaviour
 {
     public bool deselecting = false;
+    private Script_UIManager uIManager;
+    [SerializeField] Animator animator;
+
+    private void Start()
+    {
+        uIManager = GameObject.FindGameObjectWithTag("UI Manager").GetComponent<Script_UIManager>();
+    }
     public void Selected()
     {
         GetComponent<TMP_InputField>().onEndEdit.AddListener(OnEndEdit);
+        animator.SetBool("InputEntered", true);
     }
 
     public void Deselected()
@@ -20,8 +29,12 @@ public class Script_ChatInput : MonoBehaviour
         {
             deselecting = true;
             GetComponent<TMP_InputField>().onEndEdit.RemoveListener(OnEndEdit);
-            GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+
+            if (!GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_BaseStats>().GetDeathStatus())
+                GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+
             GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Input_Controller>().SetCursorState(true);
+            animator.SetBool("InputEntered", false);
             deselecting = false;
 
             gameObject.SetActive(false);
@@ -58,11 +71,25 @@ public class Script_ChatInput : MonoBehaviour
                 return;
             }
 
-            GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += inputString + "\n";
+            if (inputString.StartsWith("/godmode"))
+            {
+                GodModeCommand(inputString);
+                return;
+            }
+
+            UpdateChatRpc(AuthenticationService.Instance.PlayerName, inputString);
             GetComponent<TMP_InputField>().text = "";
 
             EventSystem.current.SetSelectedGameObject(null);
         }
+    }
+
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void UpdateChatRpc(string name, string inputString)
+    {
+        GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += name + ": " + inputString + "\n";
+        animator.SetTrigger("ChatRecieved");
     }
 
     public void AddPointsCommand(string inputString)
@@ -75,7 +102,8 @@ public class Script_ChatInput : MonoBehaviour
 
         GetComponent<TMP_InputField>().text = "";
 
-        Debug.Log("Points Adding: " + pointsToAdd);
+        GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += "*ADDED " + pointsToAdd + " POINTS!*" + "\n";
+        animator.SetTrigger("ChatRecieved");
 
         GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_PlayerUpgrades>().AddBonusPoints(pointsToAdd);
         EventSystem.current.SetSelectedGameObject(null);
@@ -91,7 +119,8 @@ public class Script_ChatInput : MonoBehaviour
 
         GetComponent<TMP_InputField>().text = "";
 
-        Debug.Log("Scrap Adding: " + scrap);
+        GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += "*ADDED " + scrapToAdd + " SCRAP!*" + "\n";
+        animator.SetTrigger("ChatRecieved");
 
         GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_PlayerUpgrades>().AddBonusScrap(scrapToAdd);
         EventSystem.current.SetSelectedGameObject(null);
@@ -107,11 +136,10 @@ public class Script_ChatInput : MonoBehaviour
 
         GetComponent<TMP_InputField>().text = "";
 
-        Debug.Log("Setting next round to " + nextRoundInt);
-
         if (nextRoundInt > 0 && NetworkManager.Singleton.IsServer)
         {
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().DebugNextRoundRpc(nextRoundInt);
+            GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += "*NEXT WAVE WILL START AT " + nextRoundInt + "*" + "\n";
+            animator.SetTrigger("ChatRecieved");
         }
         else
         {
@@ -126,5 +154,17 @@ public class Script_ChatInput : MonoBehaviour
         }
 
         EventSystem.current.SetSelectedGameObject(null);
+    }
+
+    public void GodModeCommand(string inputString)
+    {
+        GetComponent<TMP_InputField>().text = "";
+
+        bool godModeValue = GameObject.FindGameObjectWithTag("LocalPlayer").GetComponent<Script_BaseStats>().ToggleGodMode();
+
+        string godModeString = godModeValue ? "ENABLED" : "DISABLED";
+
+        GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += "*GOD MODE " + godModeString + "*" + "\n";
+        animator.SetTrigger("ChatRecieved");
     }
 }

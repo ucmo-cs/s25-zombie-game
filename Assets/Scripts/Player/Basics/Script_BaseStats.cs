@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Cinemachine;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Script_BaseStats : NetworkBehaviour
 {
@@ -17,6 +20,10 @@ public class Script_BaseStats : NetworkBehaviour
     private Coroutine lastRegen;
     public bool isDead = false;
     private bool invulnerable = false;
+    private string playerName = "";
+
+    private bool godMode = false;
+
     public bool GetDeathStatus() { return isDead; }
 
     // Mod Methods
@@ -38,8 +45,9 @@ public class Script_BaseStats : NetworkBehaviour
     }
 
     public void TakeDamage(float damage){
-        if (invulnerable)
+        if (invulnerable || godMode)
         {
+            Debug.Log("Can't take damage");
             return;
         }
 
@@ -126,10 +134,31 @@ public class Script_BaseStats : NetworkBehaviour
         GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().PlayerDeath(gameObject);
         if (tag == "LocalPlayer")
         {
+            if (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetPlayers().Count > 0)
+            {
+                Script_UIManager.Instance.SpectatorCamera(0);
+                Script_UIManager.Instance.ToggleSpectatorUI(true);
+            }
             Script_UIManager.Instance.ToggleGameplayUI(false);
-            GetComponent<Script_OtherControls>().SpectatorCamera();
+            GetComponentInChildren<CinemachineCamera>().enabled = false;
         }
-        gameObject.SetActive(false);
+
+        if (tag == "LocalPlayer")
+            GetComponent<PlayerInput>().SwitchCurrentActionMap("ChatBox");
+        
+        foreach (MeshRenderer meshRenderer in gameObject.GetComponentsInChildren<MeshRenderer>())
+        {
+            meshRenderer.enabled = false;
+        }
+
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            skinnedMeshRenderer.enabled = false;
+        }
+
+        GetComponent<CharacterController>().enabled = false;
+        transform.position = GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().deathTransportPos.transform.position;
+        GetComponent<CharacterController>().enabled = true;
     }
 
     public void StartRegen()
@@ -183,14 +212,32 @@ public class Script_BaseStats : NetworkBehaviour
         regenTimer = regenTimer - (regenTimer * value);
     }
 
-    public void Revive()
+    public void Revive(Vector3 respawnPoint)
     {
         isDead = false;
         health = maxHealth;
 
         if (tag == "LocalPlayer")
+            GetComponent<PlayerInput>().SwitchCurrentActionMap("Player");
+
+        foreach (MeshRenderer meshRenderer in gameObject.GetComponentsInChildren<MeshRenderer>())
+        {
+            meshRenderer.enabled = true;
+        }
+
+        foreach (SkinnedMeshRenderer skinnedMeshRenderer in gameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+        {
+            skinnedMeshRenderer.enabled = true;
+        }
+
+        GetComponent<CharacterController>().enabled = false;
+        transform.position = respawnPoint;
+        GetComponent<CharacterController>().enabled = true;
+
+        if (tag == "LocalPlayer")
         {
             Script_UIManager.Instance.ToggleGameplayUI(true);
+            Script_UIManager.Instance.ToggleSpectatorUI(false);
             Script_UIManager.Instance.healthBar.value = health;
             GetComponent<Script_OtherControls>().ReactivateCamera();
         }
@@ -239,5 +286,24 @@ public class Script_BaseStats : NetworkBehaviour
 
         if (tag == "LocalPlayer")
             Script_UIManager.Instance.healthBar.value = health;
+    }
+
+    [Rpc(SendTo.ClientsAndHost)]
+    public void SetNameRpc(string name)
+    {
+        playerName = name;
+        GetComponentInChildren<TMP_Text>().text = playerName;
+    }
+
+    public string GetPlayerName()
+    {
+        return playerName;
+    }
+
+    public bool ToggleGodMode()
+    {
+        godMode = !godMode;
+
+        return godMode;
     }
 }
