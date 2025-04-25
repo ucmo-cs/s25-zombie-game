@@ -34,6 +34,13 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     {
         if (other.tag == "LocalPlayer")
         {
+            if (!GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().isTransitioning)
+            {
+                prompt.text = "Kill all the zombies first!";
+                prompt.enabled = true;
+                return;
+            }
+            prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
             playerIsAtMech = true;
             other.GetComponent<Script_OtherControls>().currentInteractable = this;
             prompt.enabled = true;
@@ -54,7 +61,7 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     {
         GameObject player = GameObject.FindGameObjectWithTag("LocalPlayer");
 
-        if (playerIsAtMech)
+        if (playerIsAtMech && GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().isTransitioning)
         {
             if (player.GetComponent<Script_PlayerUpgrades>().GetScrap() < currentScrapCost)
             {
@@ -78,6 +85,14 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     {
         if (playerIsAtMech)
         {
+            if (!GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().isTransitioning)
+            {
+                prompt.text = "Kill all the zombies first!";
+                prompt.enabled = true;
+                return;
+            }
+
+            prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
             prompt.enabled = true;
         }
     }
@@ -99,6 +114,11 @@ public class Script_Mechanic : MonoBehaviour, I_Interactable
     public void ResetScrapCost()
     {
         currentScrapCost = initScrapCost;
+        if (!GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().isTransitioning)
+        {
+            prompt.text = "Kill all the zombies first!";
+            return;
+        }
         prompt.text = "Press E to open scrap menu [Cost: " + currentScrapCost + "]";
     }
 }

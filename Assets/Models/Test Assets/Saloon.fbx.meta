@@ -7,8 +7,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Blue Glow
+    second: {fileID: 2100000, guid: 74f3cb644e1131a45a803702d0fbab28, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blue Glow.001
+    second: {fileID: 2100000, guid: 1572e1fea2af2f3468322eeafb183b2b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Brown
+    second: {fileID: 2100000, guid: 4b75e05c04db0914eb6c8d8362b25f4c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Interior
     second: {fileID: 2100000, guid: c61cfd47c96bdff43a0a03a1dd396931, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Mat Black
+    second: {fileID: 2100000, guid: 7578d98db8d700d41bad990ae0ab0138, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: 3d8313df980e50d4f94d501ee97a677d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule

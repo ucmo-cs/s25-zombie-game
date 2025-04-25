@@ -52,7 +52,7 @@ public class Script_GameController : NetworkBehaviour
 
     private int currentSpawns = 0;
     private int enemiesLeft = 0;
-    private bool isTransitioning = false;
+    public bool isTransitioning = false;
     private List<GameObject> players;
     private List<GameObject> alivePlayers;
     private List<GameObject> deadPlayers = new List<GameObject>();

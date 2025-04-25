@@ -20,10 +20,11 @@ public class Script_Saloon : NetworkBehaviour
 
     public void DoorToggle(bool open){
         if (open){
-            saloonDoor.SetActive(false);
+            saloonDoor.GetComponent<Animator>().SetTrigger("Open");
         }
-        else{
-            saloonDoor.SetActive(true);
+        else
+        {
+            saloonDoor.GetComponent<Animator>().SetTrigger("Close");
         }
     }
 
