@@ -1,10 +1,11 @@
+using Steamworks.Data;
 using Unity.Services.Lobbies;
 using Unity.Services.Multiplayer;
 using UnityEngine;
 
 public class Script_SessionHandler : MonoBehaviour
 {
-    private ISession activeSession = null;
+    public Lobby? activeSession { get; private set; } = null;
 
     public static Script_SessionHandler Instance { get; private set; }
 
@@ -23,12 +24,12 @@ public class Script_SessionHandler : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    public void SetActiveSession(ISession session)
+    public void SetActiveSession(Lobby session)
     {
         activeSession = session;
     }
 
-    public ISession GetActiveSession()
+    public Lobby? GetActiveSession()
     {
         return activeSession;
     }
@@ -39,7 +40,7 @@ public class Script_SessionHandler : MonoBehaviour
         {
             try
             {
-                activeSession.LeaveAsync();
+                activeSession?.Leave();
             }
             catch
             {
@@ -54,6 +55,6 @@ public class Script_SessionHandler : MonoBehaviour
 
     public void LockSession()
     {
-        LobbyService.Instance.UpdateLobbyAsync(activeSession.Id, new UpdateLobbyOptions { IsLocked = true });
+        return;
     }
 }

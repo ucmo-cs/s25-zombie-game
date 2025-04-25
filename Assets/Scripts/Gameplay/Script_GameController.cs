@@ -1,3 +1,5 @@
+using Steamworks;
+using Steamworks.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,10 +80,6 @@ public class Script_GameController : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void StartGameRpc()
     {
-        if (IsServer)
-        {
-            Script_SessionHandler.Instance.LockSession();
-        }
 
         currentSpawns = 0;
         enemiesLeft = 0;
@@ -97,7 +95,7 @@ public class Script_GameController : NetworkBehaviour
 
         Script_UIManager.Instance.ToggleNetworkUI(false);
         NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_OtherControls>().EnableInput();
-        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_BaseStats>().SetNameRpc(AuthenticationService.Instance.PlayerName);
+        NetworkManager.Singleton.LocalClient.PlayerObject.GetComponent<Script_BaseStats>().SetNameRpc(SteamClient.Name);
         players = GameObject.FindGameObjectsWithTag("Player").ToList<GameObject>();
         players.Add(GameObject.FindGameObjectWithTag("LocalPlayer"));
         alivePlayers = new List<GameObject>(players);
@@ -307,7 +305,7 @@ public class Script_GameController : NetworkBehaviour
         debugNextRound = nextRound;
     }
 
-    public void SetSessionInfo(ISession session)
+    public void SetSessionInfo(Lobby session)
     {
         Script_SessionHandler.Instance.SetActiveSession(session);
     }

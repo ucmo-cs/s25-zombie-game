@@ -1,3 +1,4 @@
+using Steamworks;
 using System.Text.RegularExpressions;
 using TMPro;
 using Unity.Netcode;
@@ -77,7 +78,7 @@ public class Script_ChatInput : NetworkBehaviour
                 return;
             }
 
-            UpdateChatRpc(AuthenticationService.Instance.PlayerName, inputString);
+            UpdateChatRpc(SteamClient.Name, inputString);
             GetComponent<TMP_InputField>().text = "";
 
             EventSystem.current.SetSelectedGameObject(null);
