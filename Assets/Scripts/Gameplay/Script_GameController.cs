@@ -47,7 +47,7 @@ public class Script_GameController : NetworkBehaviour
     [SerializeField] private float crossoverFadeTime = 3f;
 
     private int round = 0;
-    private int debugNextRound = 0;
+    public int debugNextRound = 0;
     public int GetRound() { return round; }
 
     private int currentSpawns = 0;
@@ -183,7 +183,8 @@ public class Script_GameController : NetworkBehaviour
     [Rpc(SendTo.ClientsAndHost)]
     public void SpawnScrapRpc(Vector3 position)
     {
-        Instantiate(scrapPrefab, position, Quaternion.identity);
+        GameObject scrap = Instantiate(scrapPrefab, position, Quaternion.identity);
+        scrap.GetComponent<Rigidbody>().AddForceAtPosition((Vector3.up * 2), Random.insideUnitSphere);
     }
 
     [Rpc(SendTo.ClientsAndHost)]

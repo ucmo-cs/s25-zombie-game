@@ -41,7 +41,7 @@ public class Pistol : MonoBehaviour
     int _currentAmmoAmount = 6;
 
     // Animation Variables
-    private bool isReloading;
+    public bool isReloading = false;
     [SerializeField] private bool isShooting;
     [SerializeField] private bool canNotShoot;
 
@@ -118,14 +118,16 @@ public class Pistol : MonoBehaviour
                     float tempDamage = currentDamage + boostedDamage;
                     int points = 0;
 
-                    GameObject fleshHit = Instantiate(fleshHitEffect, hit.point, Quaternion.FromToRotation(this.transform.position, hit.normal), hit.transform);
-
-                    if(hit.transform.tag == "Enemy Head" || (hit.transform.tag == "Enemy" && vitalTargeting)){
+                    if(hit.transform.tag == "Enemy Head" || (hit.transform.tag == "Enemy" && vitalTargeting))
+                    {
+                        GameObject fleshHit = Instantiate(fleshHitEffect, hit.point, Quaternion.FromToRotation(this.transform.position, hit.normal), hit.transform);
                         tempDamage *= headshotMultiplier;
                         points = 100;
                         enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
                     }
-                    else if (hit.transform.tag == "Enemy"){
+                    else if (hit.transform.tag == "Enemy")
+                    {
+                        GameObject fleshHit = Instantiate(fleshHitEffect, hit.point, Quaternion.FromToRotation(this.transform.position, hit.normal), hit.transform);
                         points = 50;
                         enemy = hit.transform.GetComponentInParent<Script_BasicEnemy>();
                     }
@@ -152,6 +154,7 @@ public class Pistol : MonoBehaviour
 
     public void Reload(){
         Debug.Log("Gun Reloaded");
+        fpsArms.GetComponent<Animator>().SetBool("Reload", false);
         currentAmmoAmount = clipSize;
         isReloading = false;
         _input.reload = false;
@@ -162,7 +165,7 @@ public class Pistol : MonoBehaviour
             if (currentAmmoAmount < clipSize && !isReloading){
                 isReloading = true;
 
-                fpsArms.GetComponent<Animator>().SetTrigger("Reload");
+                fpsArms.GetComponent<Animator>().SetBool("Reload", true);
                 GetComponentInParent<Script_BaseStats>().TriggerReloadMethods();
                 _input.reload = false;
             }

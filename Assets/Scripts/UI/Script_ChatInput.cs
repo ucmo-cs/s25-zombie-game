@@ -140,6 +140,7 @@ public class Script_ChatInput : NetworkBehaviour
         if (nextRoundInt > 0 && NetworkManager.Singleton.IsServer)
         {
             GameObject.FindGameObjectWithTag("Chat Text").GetComponent<TMP_Text>().text += "*NEXT WAVE WILL START AT " + nextRoundInt + "*" + "\n";
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().DebugNextRoundRpc(nextRoundInt);
             animator.SetTrigger("ChatRecieved");
         }
         else

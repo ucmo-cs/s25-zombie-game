@@ -31,14 +31,14 @@ public class Script_BasicEnemy : NetworkBehaviour
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.destination = new Vector3(0, 0, 0);
+        navMeshAgent.speed = speed;
 
         health += 50 * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() - 1);
         damage += 25 * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() / 5);
         speed += 1 * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() / 5);
-        speedIncrease = 1 + (1 * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() / 5) / 5);
+        speedIncrease = 1 + (1 * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() / 5) / 4);
         attackSpeed += 0.25f * (GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetRound() / 5);
 
-        navMeshAgent.speed = speed;
         GetComponent<Animator>().SetFloat("AttackSpeed", attackSpeed);
 
         if (IsServer)
@@ -48,6 +48,12 @@ public class Script_BasicEnemy : NetworkBehaviour
 
         GetComponent<Animator>().SetFloat("MoveSpeed", speedIncrease);
         InitiateChase();
+    }
+
+    public void FixedUpdate()
+    {
+        if (!cantTakeDamage && navMeshAgent.destination != null)
+            gameObject.transform.LookAt(navMeshAgent.destination);
     }
 
     public void EndAttack(){
@@ -104,11 +110,12 @@ public class Script_BasicEnemy : NetworkBehaviour
             GetComponent<Animator>().SetFloat("RandAttack", randAttackAnim);
 
             Debug.Log("Reached Attack Trigger");
-            GetComponentInChildren<Animator>().SetTrigger("Attack");
+            GetComponentInChildren<Animator>().SetBool("Attack", true);
         }
 
         else
         {
+            GetComponentInChildren<Animator>().SetBool("Attack", false);
             StartCoroutine(StartChaseCycle());
         }
     }
