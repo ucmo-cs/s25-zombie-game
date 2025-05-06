@@ -56,6 +56,11 @@ public class Script_GameController : NetworkBehaviour
     private List<GameObject> players;
     private List<GameObject> alivePlayers;
     private List<GameObject> deadPlayers = new List<GameObject>();
+    private bool gameOver = false;
+    public bool GetGameOver()
+    {
+        return gameOver;
+    }
     public List<GameObject> GetPlayers() { return alivePlayers; }
 
     private void Start()
@@ -247,6 +252,7 @@ public class Script_GameController : NetworkBehaviour
 
             gameEndText.text = "You survived " + (round - 1) + " waves!";
 
+            gameOver = true;
 
             StartCoroutine(MixAudioSources(gameplayMusic, true));
             StartCoroutine(MixAudioSources(gameOverMusic, false));

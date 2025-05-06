@@ -10,9 +10,20 @@ public class Script_LobbyPlayerList : MonoBehaviour
     [SerializeField] GameObject playerUIPrefab;
 
     private List<GameObject> players = new List<GameObject>();
+    private bool isUpdating = false;
 
     public void UpdatePlayerList(Lobby _lobby)
     {
+        if (isUpdating)
+        {
+            
+            return;
+        }
+        else
+        {
+            isUpdating = true;
+        }
+
         foreach (var player in players)
         {
             Destroy(player.gameObject);
@@ -24,11 +35,15 @@ public class Script_LobbyPlayerList : MonoBehaviour
             Debug.Log($"Adding {player.Name} to list ");
             GameObject playerInfo = Instantiate(playerUIPrefab, gameObject.transform);
 
+            Debug.Log("Reached avatar convertion");
             Texture2D playerAvatar = CovertIcon(GetAvatar(player).Result.Value);
 
+            Debug.Log("Resolved avatar");
             playerInfo.GetComponent<Script_PlayerInfoUIInit>().Init(player.Name, playerAvatar);
             players.Add(playerInfo);
         }
+
+        isUpdating = false;
     }
 
     public void ResetLobbyPlayerList()

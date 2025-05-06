@@ -144,8 +144,8 @@ public class Script_SteamGameNetworkManager : MonoBehaviour
     {
         currentLobby = _lobby;
         Script_UIManager.Instance.SetLobbyInfo(_lobby);
-        Script_UIManager.Instance.UpdateLobbyPlayerList(_lobby);
         Script_UIManager.Instance.JoinLobby();
+        Script_UIManager.Instance.UpdateLobbyPlayerList(_lobby);
         if (NetworkManager.Singleton.IsHost)
         {
             Script_UIManager.Instance.SwitchToLobbyUI(true);

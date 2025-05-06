@@ -52,7 +52,7 @@ public class Script_BasicEnemy : NetworkBehaviour
 
     public void FixedUpdate()
     {
-        if (!cantTakeDamage && navMeshAgent.destination != null)
+        if (!cantTakeDamage && navMeshAgent.destination != null && !GameObject.FindGameObjectWithTag("GameController").GetComponent<Script_GameController>().GetGameOver())
             gameObject.transform.LookAt(navMeshAgent.destination);
     }
 

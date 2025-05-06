@@ -55,7 +55,6 @@ public class Script_UIManager : NetworkBehaviour
     public void SwitchToLobbyUI(bool host)
     {
         networkUI.GetComponent<RectTransform>().localScale = Vector3.zero;
-        UpdateLobbyPlayerList(Script_SteamGameNetworkManager.instance.currentLobby.Value);
         if (!host)
         {
             startButton.interactable = false;
